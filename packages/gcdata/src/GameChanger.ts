@@ -87,7 +87,9 @@ export class Gcdata {
     return resolvePointer(pointer, mote.data) || mote.id;
   }
 
-  getMote(moteId: Mote | string | MoteId | undefined): Mote | undefined {
+  getMote<T = any>(
+    moteId: Mote | string | MoteId | undefined,
+  ): Mote<T> | undefined {
     if (!moteId) return;
     return this.data.motes[typeof moteId === 'string' ? moteId : moteId.id];
   }
