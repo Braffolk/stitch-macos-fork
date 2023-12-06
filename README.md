@@ -17,6 +17,10 @@ process.env for MacOS:
 
 ## Progress
 
+VSCode extension mostly works now. Managing runtimes and IDEs and
+running projects also works. Downloading new IDE's is a bit flaky,
+although all tests pass.
+
 #### Releases package
 Supports MacOS and Linux.
 
@@ -73,8 +77,10 @@ Tests passing: 23/23
 
 ### VSCode package
 
-- Nothing yet
-- ...
+Works on MacOS
+
+- Added clearer error messages for IDE install fails
+- Added a delay to sending messages to terminal, otherwise on unix based systems the messages can send twice
 
 
 ## Potential problems
