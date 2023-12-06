@@ -53,12 +53,23 @@ Issues:
 
 Supports MacOS.
 
-Tests passing: 26/33
+Tests passing: 54 passing, 7 pending
 
 - GameMakerEngine does not fallback to windows. It attempts to derive the used platform
 
-Issues:
-- Sprite functions fail
+### Pixel Checksum
+
+Supports MacOS
+
+Tests passing: 2/2
+
+### Spritely package
+
+Supports MacOS
+
+Tests passing: 23/23
+
+- All tests run when the canvas library is used
 
 ### VSCode package
 

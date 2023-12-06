@@ -17,7 +17,8 @@
     "build-debug": "npm run build --",
     "build-release": "npm run build -- --release",
     "install": "npm run build-release",
-    "test": "node index.test.js"
+    "test": "node index.test.js",
+    "build_test": "cargo-cp-artifact -nc pixel-checksum.node -- cargo build --message-format=json-render-diagnostics && node index.test.js"
   },
   "devDependencies": {
     "cargo-cp-artifact": "^0.1"

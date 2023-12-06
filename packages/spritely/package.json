@@ -36,18 +36,21 @@
     "clean": "rimraf build dist *.tsbuildinfo **/*.tsbuildinfo",
     "test": "mocha --config ../../config/.mocharc.cjs",
     "test:dev": "mocha --config ../../config/.mocharc.cjs --forbid-only=false --parallel=false --timeout=9999999999",
+    "build_test": "tsc --build && mocha --config ../../config/.mocharc.cjs --forbid-only=false --parallel=false --timeout=9999999999",
     "watch": "tsc --build --watch"
   },
   "dependencies": {
     "@bscotch/debounce-watch": "^1.1.0",
     "@bscotch/pathy": "^2.12.0",
+    "@bscotch/spritely": "link:",
     "@bscotch/utility": "^7.2.0",
     "commander": "11.1.0",
     "fs-extra": "11.1.1",
     "image-js": "0.35.5",
     "image-size": "1.0.2",
     "tslib": "^2.6.2",
-    "yaml": "2.3.4"
+    "yaml": "2.3.4",
+    "canvas": "2.11.2"
   },
   "devDependencies": {
     "@types/chai": "^4.3.10",
@@ -57,6 +60,9 @@
     "mocha": "^10.2.0",
     "rimraf": "^5.0.5",
     "typescript": "5.2.2"
+  },
+  "optionalDependencies": {
+
   },
   "engines": {
     "node": ">=14.0.0"
