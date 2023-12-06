@@ -1,7 +1,22 @@
 import { z } from 'zod';
-import { Crashlands2 } from './types.cl2.js';
-import { Position, Range } from './types.editor.js';
-import { Mote } from './types.js';
+import type { Gcdata } from './GameChanger.js';
+import type { Crashlands2 } from './cl2.types.auto.js';
+import { ParsedComment, ParserResult } from './cl2.types.editor.js';
+import type { Position, Range } from './types.editor.js';
+import type { Mote } from './types.js';
+
+export const questSchemaId = 'cl2_quest';
+
+export type QuestData = Crashlands2.Schemas['cl2_quest'];
+export type QuestMote = Mote<QuestData>;
+
+export function listQuests(gcData: Gcdata): QuestMote[] {
+  return gcData.listMotesBySchema<QuestData>(questSchemaId);
+}
+
+export function isQuestMote(mote: any): mote is Mote<Crashlands2.Quest> {
+  return mote.schema_id === questSchemaId;
+}
 
 export interface ParsedLineItem<V = string> {
   start: Position;
@@ -87,12 +102,6 @@ export interface ParsedDialog {
   text: string;
 }
 
-export interface ParsedComment {
-  /** arrayId */
-  id: string | undefined;
-  text: string | undefined;
-}
-
 export interface ParsedRequirementQuest {
   kind: 'quest';
   id: string | undefined;
@@ -115,12 +124,8 @@ type ParsedRequirement = ParsedRequirementQuest | ParsedRequirementOther;
 export type QuestMomentsLabel = `quest_${'start' | 'end'}_moments`;
 export type QuestRequirementsLabel = `quest_${'start' | 'end'}_requirements`;
 
-export interface QuestUpdateResult {
-  diagnostics: (Range & { message: string })[];
-  hovers: (Range & { title?: string; description?: string })[];
-  edits: (Range & { newText: string })[];
+export interface QuestUpdateResult extends ParserResult {
   completions: (Range & CompletionsData)[];
-  words: (Range & { value: string; suggestions?: string[]; valid: boolean })[];
   parsed: {
     name?: string;
     /** The moteId for the storyline */

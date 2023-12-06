@@ -1,7 +1,6 @@
 import { assert } from './assert.js';
-import type { Crashlands2 } from './types.cl2.js';
 import { Position } from './types.editor.js';
-import type { BschemaBsArray, BschemaObject, Mote } from './types.js';
+import type { BschemaBsArray, BschemaObject } from './types.js';
 
 export const ORDER_INCREMENT = 5;
 
@@ -30,16 +29,6 @@ export function bsArrayToArray<T extends BsArray>(
       element: item.element,
     }))
     .sort((a, b) => a.order - b.order);
-}
-
-export function isQuestMote(mote: any): mote is Mote<Crashlands2.Quest> {
-  return mote.schema_id === 'cl2_quest';
-}
-
-export function isStorylineMote(
-  mote: any,
-): mote is Mote<Crashlands2.Storyline> {
-  return mote.schema_id === 'cl2_storyline';
 }
 
 export function isObjectSchema(schema: any): schema is BschemaObject {
@@ -187,4 +176,27 @@ export function updateBsArrayOrder(sorted: BsArrayItem[]) {
     }
   }
   return sorted;
+}
+
+/**
+ * Given a moteId (or a mote), return `@${moteId}`.
+ */
+export function toMoteTag(item: string | { id: string } | undefined): string {
+  assert(
+    item && (typeof item === 'string' || 'id' in item),
+    `ID must be a string or Mote, instead got ${item}`,
+  );
+  const idStr = typeof item === 'string' ? item : item.id;
+  return `@${idStr}`;
+}
+/**
+ * Given a BschemaArray element ID (or an element), return `#${elementId}`.
+ */
+export function toArrayTag(item: string | { id: string }): string {
+  assert(
+    typeof item === 'string' || 'id' in item,
+    'ID must be a string or Mote',
+  );
+  const idStr = typeof item === 'string' ? item : item.id;
+  return `#${idStr}`;
 }
