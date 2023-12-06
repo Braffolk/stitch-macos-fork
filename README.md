@@ -27,11 +27,13 @@ Tests passing: 5/5
 - releases-summary.json is replaced with 3 files: ...-win.json, ...-mac.json, ...-linux.json
 
 ### Launcher package
+
 Supports MacOS.
 
 Tests passing: 11/11
 
 The following features work on a Mac with MacOS IDEs/runtimes:
+
 - Can download Runtimes and IDE files on MacOS
 - Can properly handle reading and listing Runtimes and IDEs.
 - Can install new IDE versions.
@@ -40,6 +42,7 @@ The following features work on a Mac with MacOS IDEs/runtimes:
 - Can open projects with a given runtime
 
 Issues:
+
 - older runtimes do not have an easily distinguishable (some point in 2022) way of launching Igor. So they are not supported as of now
 - There are no separate release notes for MacOS. The RSS feeds link to the Windows release notes.
     This causes an issue when there is an IDE version that is only available for MacOS. In such
@@ -48,18 +51,26 @@ Issues:
 
 ### Core package
 
+Supports MacOS.
+
+Tests passing: 26/33
+
 - GameMakerEngine does not fallback to windows. It attempts to derive the used platform
 
 Issues:
-- Right now the OS is detected using process.platform. This is a compile time variable, meaning it will not work in production. Needs to be replaced
-
-
+- Sprite functions fail
 
 ### VSCode package
 
 - Nothing yet
 - ...
 
+
+## Potential problems
+Since I don't work with Node daily, I might have missed some things. Here are some potential problems:
+
+- Detecting OS uses os.type(). This, according to docs, in prod tells what platform the binary was compiled for. 
+    Not sure if this will work with the build process of Stitch.
 
 
 # Stitch Monorepo
