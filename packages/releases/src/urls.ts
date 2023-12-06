@@ -1,10 +1,8 @@
 import { literal } from '@bscotch/utility/browser';
 import type { Channel } from './feeds.types.js';
-import {currentOsCode} from "./constants.js";
 
-// TODO - separate ideFeedUrls per OS
-export function ideFeedUrls() {
-  const prefix = `https://gms.yoyogames.com/update-${currentOsCode}`;
+export function ideFeedUrls(osCode: 'win' | 'mac' | 'linux') {
+  const prefix = `https://gms.yoyogames.com/update-${osCode}`;
 
   return literal({
     lts: `${prefix}-LTS.rss`,

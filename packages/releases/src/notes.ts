@@ -43,6 +43,10 @@ export async function listReleaseNotes(
 					...rawReleaseNoteSchema.parse(note),
 				};
 			} catch (err) {
+				// Sometimes MacOS releases have non-existing release notes.
+				// In those cases, the feed will still link to a windows release notes url
+				// which will be missing.
+				// TODO: Consider adding an OS check, which still throws in case of windows
 				console.info(`Error fetching release notes from ${url}:`, err);
 				cacheData[url] = {
 					type,
