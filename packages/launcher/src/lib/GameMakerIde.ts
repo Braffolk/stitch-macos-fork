@@ -8,7 +8,7 @@ import type {
 } from './GameMakerLauncher.types.js';
 import {
   cleanVersionString,
-  createStaticTracer,
+  createStaticTracer, deriveOs,
   download,
   listDefaultMacrosPaths,
   listInstalledIdes,
@@ -381,18 +381,18 @@ export class GameMakerIde extends GameMakerComponent {
   }
 
   static cachedIdeInstallerPath(version: string) {
-    switch(process.platform) {
-        case 'win32':
-            return GameMakerIde.defaultCachedIdeParentDirectory.join(
-            `gamemaker-${version}.exe`,
-            );
-        case 'darwin':
-            return GameMakerIde.defaultCachedIdeParentDirectory.join(
-            `gamemaker-${version}.pkg`,
-            );
+    let basename;
+    switch(deriveOs()) {
+        case 'win':
+            basename = `gamemaker-${version}.exe`;
+            break;
+        case 'mac':
+            basename = `gamemaker-${version}.pkg`;
+            break;
         default:
-            throw new Error(`No installer available for platform ${process.platform}`);
+            throw new Error(`No installer supported or available for platform ${deriveOs()}`);
     }
+    return GameMakerIde.defaultCachedIdeParentDirectory.join(basename);
   }
 
   static cachedIdeDirectory(version: string) {

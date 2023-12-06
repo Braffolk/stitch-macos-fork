@@ -1,7 +1,7 @@
 import {
   Channel,
   gameMakerReleaseWithNotesSchema,
-  releasesUrl,
+  releasesUrls,
   runtimeFeedUrls,
 } from '@bscotch/gamemaker-releases';
 import { Pathy, pathy } from '@bscotch/pathy';
@@ -21,7 +21,7 @@ import {
   listGameMakerDataDirs,
   listInstalledIdes,
   listRuntimeFeedsConfigPaths,
-  stitchConfigDir,
+  stitchConfigDir, deriveOs,
 } from './utility.js';
 
 export class GameMakerComponent {
@@ -170,9 +170,10 @@ export class GameMakerComponent {
   public static async listReleases(options?: {
     /** Max age of the cached releases list */
     maxAgeSeconds?: number;
+    os?: 'win' | 'mac' | 'linux'
   }) {
     await downloadIfCacheExpired(
-      releasesUrl,
+      releasesUrls[options?.os || deriveOs()],
       GameMakerComponent.releasesCachePath,
       options?.maxAgeSeconds || 1800,
     );
@@ -183,9 +184,11 @@ export class GameMakerComponent {
     ideVersion?: string;
     runtimeVersion?: string;
     maxAgeSeconds?: number;
+    os?: 'win' | 'mac' | 'linux'
   }) {
     const releases = await GameMakerComponent.listReleases({
       maxAgeSeconds: searchOptions.maxAgeSeconds,
+      os: searchOptions.os || deriveOs(),
     });
     const release = releases.find((release) => {
       if (searchOptions.ideVersion) {
