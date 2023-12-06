@@ -15,27 +15,46 @@ process.env for MacOS:
 - PROGRAMDATA: /Users/Shared/
 - APPDATA: /Users/account-here/.config
 
-Finished, but not cleaned up:
-1. Releases package:
-  - Can correctly handle MacOS runtime/ide urls.
-2. Launcher package:
-  - Downloading runtime/IDE files.
-  - Listing runtime/IDE files.
-  - Installing IDEs
-  - Caching runtime/IDE files.
-  - Listing installed IDE/runtime versions
-  - Running projects with a given runtime
-  - Opening projects with a given runtime
+## Progress
 
-TODO:
-- releases-summary.json generation and runtime/ide urls should be OS specific.
-- Get all tests running for vscode.
-- Update the launcher package to ensure Igor commands work
+#### Releases package
+Supports MacOS and Linux.
 
-Problems:
+- Downloading and reading release feeds is now OS specific. The package does not know the OS, the OS is passed into params
+- Added tests for downloading Linux and MacOS releases
+- releases-summary.json is replaced with 3 files: ...-win.json, ...-mac.json, ...-linux.json
+
+### Launcher package
+Supports MacOS, the following features work on a Mac with MacOS IDEs/runtimes:
+
+- Can download Runtimes and IDE files on MacOS
+- Can properly handle reading and listing Runtimes and IDEs.
+- Can install new IDE versions.
+- Properly caches downloaded IDE versions
+- Can run projects with a runtime (Igor commands work)
+- Can open projects with a given runtime
+
+Issues:
+- older runtimes do not have an easily distinguishable (some point in 2022) way of launching Igor. So they are not supported as of now
 - There are no separate release notes for MacOS. The RSS feeds link to the Windows release notes.
     This causes an issue when there is an IDE version that is only available for MacOS. In such
     a case, there will be a link to the release notes, but requesting it will give AccessDenied.
+- The code is a bit messy. Different platforms logic is inserted into many random places. This probably needs some refactoring
+
+### Core package
+
+- GameMakerEngine does not fallback to windows. It attempts to derive the used platform
+
+Issues:
+- Right now the OS is detected using process.platform. This is a compile time variable, meaning it will not work in production. Needs to be replaced
+
+
+
+### VSCode package
+
+- Nothing yet
+- ...
+
 
 
 # Stitch Monorepo
