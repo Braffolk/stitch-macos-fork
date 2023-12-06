@@ -9,7 +9,13 @@
       "name": "Extension",
       "type": "extensionHost",
       "request": "launch",
-      "args": ["--extensionDevelopmentPath=${workspaceFolder}"]
+      "args": ["--extensionDevelopmentPath=${workspaceFolder}"],
+      "env": {
+        // Temporarily necessay for mac
+        "APPDATA": "/Users/sebastian/.config",
+        "PROGRAMDATA": "/Users/Shared/",
+        "PROGRAMFILES": "/Users/sebastian/Applications"
+      }
     }
   ]
 }

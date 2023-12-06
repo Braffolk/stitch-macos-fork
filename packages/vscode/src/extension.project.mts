@@ -51,7 +51,18 @@ export class GameMakerProject extends Project {
             increment: 10,
             message: 'Version not found. Installing...',
           });
-          await GameMakerIde.install(this.ideVersion);
+          try {
+            await GameMakerIde.install(this.ideVersion);
+          } catch (err) {
+            await showErrorMessage(
+              `Could not install GameMaker v${this.ideVersion}: ${err}`,
+            );
+            progress.report({
+                increment: 100,
+                message: `Failed to install GameMaker v${this.ideVersion}.`,
+            });
+            throw err;
+          }
         }
         progress.report({
           increment: 90,
@@ -133,6 +144,8 @@ export class GameMakerProject extends Project {
       quiet: true,
     });
 
+    logger.info("Command is: " + cmd);
+
     // Create or re-use a terminal
     const name = `GameMaker v${release.runtime.version}`;
     const existing = vscode.window.terminals.find((term) => term.name === name);
@@ -143,8 +156,14 @@ export class GameMakerProject extends Project {
     const terminal = vscode.window.createTerminal({
       name: `GameMaker v${release.runtime.version}`,
     });
-    terminal.sendText(cmd);
     terminal.show();
+    // wait 1 second for terminal to open
+    // Otherwise on MacOS the terminal will sometimes
+    // double the input of the first command
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+    
+    terminal.sendText(cmd, true);
+    
     return;
   }
 

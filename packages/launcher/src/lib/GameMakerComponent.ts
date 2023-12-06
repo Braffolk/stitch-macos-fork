@@ -163,7 +163,7 @@ export class GameMakerComponent {
 
   public static get releasesCachePath() {
     return GameMakerComponent.cacheDir
-      .join(`releases-summary.json`)
+      .join(`releases-summary-${deriveOs()}.json`)
       .withValidator(z.array(gameMakerReleaseWithNotesSchema));
   }
 
