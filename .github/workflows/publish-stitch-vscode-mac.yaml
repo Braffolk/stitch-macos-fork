@@ -1,0 +1,56 @@
+name: Stitch for VSCode MacOS
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'bscotch-stitch-vscode@*'
+
+permissions:
+  contents: write
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  publish:
+    runs-on: macos-latest
+    permissions:
+      contents: write
+    steps:
+      # SETUP
+      - uses: actions/checkout@v3
+        with:
+          lfs: true
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18.18.0
+      - run: corepack enable
+      - run: pnpm install --filter=bscotch-stitch-vscode... --filter=stitch-monorepo
+      - run: pwd
+
+      # BUILD DEPS
+      - name: Build
+        run: pnpm turbo run build --only --filter=bscotch-stitch-vscode...
+
+      - name: CreateVSCodePackage
+        run: vsce package --no-dependencies --githubBranch develop
+        env:
+          APPDATA: $HOME/.config
+          PROGRAMDATA: /Users/Shared/
+          PROGRAMFILES: $HOME/Applications
+
+      # Publish created package as a github release
+      - name: Create Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+          draft: false
+          prerelease: false
+          body: |
+            This is an auto-generated release for ${{ github.ref }}.
+            It contains the latest version of the MacOS Stitch for VSCode extension.
