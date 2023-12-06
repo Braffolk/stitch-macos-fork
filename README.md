@@ -20,13 +20,18 @@ process.env for MacOS:
 #### Releases package
 Supports MacOS and Linux.
 
+Tests passing: 5/5
+
 - Downloading and reading release feeds is now OS specific. The package does not know the OS, the OS is passed into params
 - Added tests for downloading Linux and MacOS releases
 - releases-summary.json is replaced with 3 files: ...-win.json, ...-mac.json, ...-linux.json
 
 ### Launcher package
-Supports MacOS, the following features work on a Mac with MacOS IDEs/runtimes:
+Supports MacOS.
 
+Tests passing: 11/11
+
+The following features work on a Mac with MacOS IDEs/runtimes:
 - Can download Runtimes and IDE files on MacOS
 - Can properly handle reading and listing Runtimes and IDEs.
 - Can install new IDE versions.
