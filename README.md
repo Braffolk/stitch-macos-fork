@@ -13,19 +13,29 @@ https://stitch-mac.s3.eu-central-1.amazonaws.com/releases-summary-mac.json
 process.env for MacOS:
 - PROGRAMFILES: /Users/account-here/Applications
 - PROGRAMDATA: /Users/Shared/
+- APPDATA: /Users/account-here/.config
 
 Finished, but not cleaned up:
 1. Releases package:
   - Can correctly handle MacOS runtime/ide urls.
 2. Launcher package:
-  - Downloading runtime/ide files.
-  - Listing runtime/ide files.
+  - Downloading runtime/IDE files.
+  - Listing runtime/IDE files.
   - Installing IDEs
-  - Caching runtime/ide files.
+  - Caching runtime/IDE files.
+  - Listing installed IDE/runtime versions
+  - Running projects with a given runtime
+  - Opening projects with a given runtime
 
 TODO:
 - releases-summary.json generation and runtime/ide urls should be OS specific.
-- Get all tests running for launcher and vscode. 5/11 for launcher run
+- Get all tests running for vscode.
+- Update the launcher package to ensure Igor commands work
+
+Problems:
+- There are no separate release notes for MacOS. The RSS feeds link to the Windows release notes.
+    This causes an issue when there is an IDE version that is only available for MacOS. In such
+    a case, there will be a link to the release notes, but requesting it will give AccessDenied.
 
 
 # Stitch Monorepo

@@ -307,11 +307,9 @@ export class GameMakerIde extends GameMakerComponent {
   ): Promise<GameMakerIde[]> {
     const tracer = ideClassStaticTracer('listInstalledInDir');
     const releases = await GameMakerIde.listReleases();
-    tracer(`Searching for folders with GameMaker .exe files in "${parentDir}"`);
+    tracer(`Searching for folders with GameMaker executable files in "${parentDir}"`);
     const ideExecutables = await listInstalledIdes(parentDir);
-    tracer(`Found ${ideExecutables.length} GameMaker .exe files`);
-
-    console.log("parentDir", parentDir);
+    tracer(`Found ${ideExecutables.length} GameMaker executable files`);
 
     const ideVersions: (GameMakerIde | undefined)[] = await Promise.all(
       ideExecutables.map(async (executablePath) => {
