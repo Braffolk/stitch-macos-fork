@@ -2,6 +2,21 @@
   <img src="https://img.bscotch.net/fit-in/256x256/logos/stitch.png" alt="Stitch (GameMaker Pipeline Development Kit) Logo"/>
 </p>
 
+
+# MACOS NOTES:
+
+For testing purposes, the following summary files is used:
+https://stitch-mac.s3.eu-central-1.amazonaws.com/releases-summary-mac.json
+
+process.env for MacOS:
+- PROGRAMFILES: /Users/account-here/Applications
+- PROGRAMDATA: /Users/Shared/
+
+TODO:
+- releases-summary.json generation and runtime/ide urls should be OS specific.
+- Get all tests running for launcher and vscode. 5/11 for launcher run
+
+
 # Stitch Monorepo
 
 [Butterscotch Shenanigans](https://www.bscotch.net) ("Bscotch") develops and maintains a collection of tools for management of [GameMaker](https://gamemaker.io) projects. These tools are collected under the umbrella trademark "Stitch".
