@@ -9,4 +9,4 @@ export type {
   GameMakerRelease,
   GameMakerReleaseWithNotes,
 } from './feeds.types.js';
-export { releasesUrl } from './releases.js';
+export { releasesUrls } from './releases.js';

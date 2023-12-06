@@ -9,9 +9,9 @@ import { fetchJson } from './fetch.js';
  */
 
 export const releasesUrls = {
-    win: 'https://stitch-win.s3.eu-central-1.amazonaws.com/releases-summary-win.json',
+    win: 'https://stitch-mac.s3.eu-central-1.amazonaws.com/releases-summary-win.json',
     mac: 'https://stitch-mac.s3.eu-central-1.amazonaws.com/releases-summary-mac.json',
-    linux: 'https://stitch-linux.s3.eu-central-1.amazonaws.com/releases-summary-linux.json'
+    linux: 'https://stitch-mac.s3.eu-central-1.amazonaws.com/releases-summary-linux.json'
 }
 
 /**
