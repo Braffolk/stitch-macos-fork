@@ -15,7 +15,8 @@ import {
   GameMakerLogOptions,
 } from './GameMakerEngine.types.js';
 import * as process from "process";
-import {deriveTargetPlatform} from "../utility/platform";
+import {deriveTargetPlatform} from "../utility/platform.js";
+
 
 export async function runGameMakerCommand<W extends GameMakerCliWorker>(
   engine: GameMakerEngine,

@@ -14,8 +14,8 @@ import {
   StitchSupportedBuilder,
 } from './GameMakerRuntime.types.js';
 import {
-  artifactExtensionForPlatform,
-  currentOs, deriveTargetPlatform,
+  artifactExtensionForPlatform, deriveOs,
+  deriveTargetPlatform,
   projectLogDirectory,
 } from './utility.js';
 import * as console from "console";
@@ -238,7 +238,7 @@ export async function executeGameMakerCommand<W extends GameMakerCliWorker>(
   otherOptions?: GameMakerLogOptions,
 ) {
   const childEnv = { ...process.env };
-  if (childEnv.PATH && currentOs === 'windows') {
+  if (childEnv.PATH && deriveOs() === 'win') {
     //This is because node's the ENV contain the PATH variable that conflicts with MSBuild
     //See https://github.com/dotnet/msbuild/issues/5726
     delete childEnv.PATH;
@@ -255,7 +255,7 @@ export async function executeGameMakerCommand<W extends GameMakerCliWorker>(
     env: childEnv,
     stdio: 'pipe',
     // Shell is required on mac, as quotes aren't removed otherwise from args
-    shell: currentOs !== 'windows' ? true : undefined
+    shell: deriveOs() !== 'win' ? true : undefined
   });
 
   // Set up writeable file streams

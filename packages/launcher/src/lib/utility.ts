@@ -160,7 +160,7 @@ export function cleanVersionString(version: string): string {
 export async function download(
   url: string,
   to: Pathy,
-  options?: { force: boolean },
+  options?: { force: boolean }
 ) {
   if ((await to.exists()) && !options?.force) {
     console.log(
@@ -351,7 +351,6 @@ export async function listGameMakerDataDirs(): Promise<Pathy[]> {
   for (const potentialDataDir of potentialDataDirs) {
     const cacheDir = potentialDataDir.join('Cache/runtimes');
     if (await cacheDir.exists()) {
-      console.log("found runtime cacheDir", cacheDir.absolute);
       dataDirs.push(potentialDataDir);
     }
   }
@@ -387,13 +386,27 @@ export async function listInstalledIdes(
 
 
 export function deriveTargetPlatform() {
-  if (process.platform === 'win32') {
-    return 'windows';
-  } else if (process.platform === 'darwin') {
-    return 'mac';
-  } else if (process.platform === 'linux') {
-    return 'linux';
-  } else {
-    throw new Error(`Unsupported platform: ${process.platform}`);
+  switch(os.type()) {
+    case 'Windows_NT':
+      return 'windows';
+    case 'Darwin':
+      return 'mac';
+    case 'Linux':
+      return 'linux';
+    default:
+      throw new Error(`Unsupported platform: ${os.type()}`);
+  }
+}
+
+export function deriveOs() {
+  switch(os.type()) {
+    case 'Windows_NT':
+      return 'win';
+    case 'Darwin':
+      return 'mac';
+    case 'Linux':
+      return 'linux';
+    default:
+      throw new Error(`Unsupported platform: ${os.type()}`);
   }
 }
