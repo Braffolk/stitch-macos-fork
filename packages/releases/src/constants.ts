@@ -9,3 +9,12 @@ export const defaultCacheDir = pathy(
 export const defaultNotesCachePath = defaultCacheDir.join(
   'release-notes-cache.json',
 );
+
+export const currentOsCode =
+    os.platform() === 'win32'
+        ? 'win'
+        : os.platform() === 'darwin'
+            ? 'mac'
+            : os.platform() === 'linux'
+                ? 'linux'
+                : undefined;

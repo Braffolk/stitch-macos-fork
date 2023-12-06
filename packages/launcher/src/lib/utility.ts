@@ -1,18 +1,15 @@
-import { Pathy } from '@bscotch/pathy';
-import { ok } from 'assert';
-import { default as axios } from 'axios';
-import { exec } from 'child_process';
-import { createWriteStream } from 'fs';
+import {Pathy, PathyListChildrenOptions} from '@bscotch/pathy';
+import {ok} from 'assert';
+import {default as axios} from 'axios';
+import {exec} from 'child_process';
+import {createWriteStream} from 'fs';
 import os from 'os';
-import {
-  GameMakerDefaultMacros,
-  GameMakerInstalledVersion,
-  GameMakerLogOptions,
-} from './GameMakerLauncher.types.js';
-import { StitchSupportedBuilder } from './GameMakerRuntime.types.js';
+import {GameMakerDefaultMacros, GameMakerInstalledVersion, GameMakerLogOptions,} from './GameMakerLauncher.types.js';
+import {StitchSupportedBuilder} from './GameMakerRuntime.types.js';
 
-import { assert, Debugger, Trace, useTracer } from '@bscotch/utility/browser';
-import { z } from 'zod';
+import {assert, Debugger, Trace, useTracer} from '@bscotch/utility/browser';
+import {z} from 'zod';
+import * as process from "process";
 
 const libName = '@bscotch/stitch-launcher';
 
@@ -32,7 +29,7 @@ export function createStaticTracer(className: string, methodName: string) {
   return useTracer(`${libName}:${className}:${methodName}`);
 }
 
-export const bootstrapRuntimeVersion = '2022.300.0.476';
+export const bootstrapRuntimeVersion = '2022.300.0.478';
 
 export const stitchConfigDir = new Pathy(`${os.homedir()}/.stitch`);
 
@@ -191,9 +188,18 @@ export async function download(
 
 // Make async so we don't block any threads
 export async function runIdeInstaller(idePath: Pathy) {
-  ok(process.platform === 'win32', 'Only Windows is supported');
+  ok(process.platform === 'win32' || process.platform == 'darwin', 'Only Windows and mac are supported');
   console.log('Running installer', idePath.basename, '...');
-  const command = `start /wait "" "${idePath.absolute}" /S`;
+  let command = '';
+  if (process.platform === 'win32') {
+    command = `start /wait "" "${idePath.absolute}" /S`;
+  } else if (process.platform === 'darwin') {
+    // Potentially risky, because the installer waits
+    // for every other installer to finish before execution.
+    // Also overwrites existing installation from same channel
+    // Can be fixed by changing -target
+    command = `installer -verbose -pkg "${idePath.absolute}" -target CurrentUserHomeDirectory`;
+  }
   debug(`Running command: ${command}`);
   const installer = exec(command);
   return await new Promise((resolve, reject) => {
@@ -340,15 +346,28 @@ export async function listGameMakerDataDirs(): Promise<Pathy[]> {
   return dataDirs;
 }
 
+
+const installedIdesOSOptions = {
+    win32: {
+      maxDepth: 1,
+      includePatterns: [/^GameMaker(Studio2?)?((-| )(Beta|LTS))?\.exe$/],
+    },
+    darwin: {
+        maxDepth: 1,
+        filter: (path: Pathy): boolean => path.basename
+            .match(/GameMaker(Studio2?)?((-| )(Beta|LTS))?\.app|gamemaker-.*\.app$/) != null,
+        includeDirs: 'only',
+    }
+};
+
 export async function listInstalledIdes(
   parentDir: string | Pathy = process.env.PROGRAMFILES!,
 ) {
   assert(parentDir, 'No program files directory provided');
+  assert (process.platform === 'win32' || process.platform === 'darwin', 'Only Windows and mac are supported');
 
-  const ideExecutables = await new Pathy(parentDir).listChildrenRecursively({
-    maxDepth: 1,
-    includePatterns: [/^GameMaker(Studio2?)?(-(Beta|LTS))?\.exe$/],
-  });
+  const options =
+      installedIdesOSOptions[process.platform as 'win32' | 'darwin'] as PathyListChildrenOptions;
 
-  return ideExecutables;
+  return await new Pathy(parentDir).listChildrenRecursively(options);
 }

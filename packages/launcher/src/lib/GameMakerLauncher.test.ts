@@ -12,9 +12,10 @@ const sampleProjectPath = 'samples/project/project.yyp';
 const sampleProjectCompatibleIde = '2022.600.0.147'; //'2022.500.0.97'; //'2022.500.0.88'; //'2022.600.0.147';
 const sampleProjectCompatibleRuntime = '2022.600.0.121';
 
-xdescribe('GameMakerLauncher', function () {
+describe('GameMakerLauncher', function () {
   it('can list known filepaths', async function () {
     const paths = await GameMakerComponent.listWellKnownPaths();
+
     expect(paths.length).to.be.greaterThan(0);
   });
 
@@ -40,6 +41,7 @@ xdescribe('GameMakerLauncher', function () {
       unstable: 0,
     };
     for (const version of releases) {
+      // @ts-ignore
       counts[version.channel]++;
       expect(version.ide.version).to.match(/^\d+\.\d+\.\d+\.\d+$/);
       expect(version.runtime.version).to.match(/^\d+\.\d+\.\d+\.\d+$/);

@@ -218,7 +218,8 @@ export class GameMakerIde extends GameMakerComponent {
         // Download & install!
         const installerPath = GameMakerIde.cachedIdeInstallerPath(version);
         await download(release.ide.link, installerPath);
-        await runIdeInstaller(installerPath);
+        // TODO - uncomment:
+        //await runIdeInstaller(installerPath);
         // Make sure this version is now installed
         directlyInstalled = await GameMakerIde.findDirectlyInstalled(
           version,
@@ -310,11 +311,23 @@ export class GameMakerIde extends GameMakerComponent {
     const ideExecutables = await listInstalledIdes(parentDir);
     tracer(`Found ${ideExecutables.length} GameMaker .exe files`);
 
+    console.log("parentDir", parentDir);
+
     const ideVersions: (GameMakerIde | undefined)[] = await Promise.all(
       ideExecutables.map(async (executablePath) => {
         const possibleFileNames =
-          /^(IDE|GameMaker(Studio2?)?(-(Beta|LTS))?)\.dll$/;
-        const parentDir = executablePath.up();
+          /^(IDE|GameMaker(Studio2?)?(-(Beta|LTS))?)\.dll|Info\.plist$/;
+        let parentDir = executablePath;
+        if (executablePath.basename.endsWith('.exe')) {
+          parentDir = parentDir.up();
+        } else if(process.platform === 'darwin') {
+          // On mac, .app are base directories. On windows, .exe are files.
+          // Hence on mac we need to go 'down', not up.
+          let down = await parentDir.findChild('Contents');
+          if (down) {
+            parentDir = down;
+          }
+        }
         tracer(
           `Parsing version information from GameMaker installation in "${parentDir}"`,
         );
@@ -342,11 +355,15 @@ export class GameMakerIde extends GameMakerComponent {
           );
           return;
         }
+        let installDir = executablePath;
+        if (executablePath.basename.endsWith('.exe')) {
+          installDir = installDir.up();
+        }
         return new GameMakerIde({
           version,
           channel: matchingFeedVersion.channel,
           executablePath,
-          directory: executablePath.up(),
+          directory: installDir,
           publishedAt: new Date(matchingFeedVersion.publishedAt),
           feedUrl: matchingFeedVersion.ide.feedUrl,
         });
@@ -366,14 +383,27 @@ export class GameMakerIde extends GameMakerComponent {
   }
 
   static cachedIdeInstallerPath(version: string) {
-    return GameMakerIde.defaultCachedIdeParentDirectory.join(
-      `gamemaker-${version}.exe`,
-    );
+    switch(process.platform) {
+        case 'win32':
+            return GameMakerIde.defaultCachedIdeParentDirectory.join(
+            `gamemaker-${version}.exe`,
+            );
+        case 'darwin':
+            return GameMakerIde.defaultCachedIdeParentDirectory.join(
+            `gamemaker-${version}.pkg`,
+            );
+        default:
+            throw new Error(`No installer available for platform ${process.platform}`);
+    }
   }
 
   static cachedIdeDirectory(version: string) {
+    let basename = `gamemaker-${version}`;
+    if (process.platform === 'darwin') {
+        basename += '.app';
+    }
     return GameMakerIde.defaultCachedIdeParentDirectory.join(
-      `gamemaker-${version}`,
+      basename
     );
   }
 }
