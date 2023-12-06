@@ -239,10 +239,21 @@ export async function listInstalledRuntimes(): Promise<
       continue;
     }
 
-    const executablePaths = [
-      runtimeDir.join('bin/Igor.exe'),
-      runtimeDir.join('bin/igor/windows/x64/Igor.exe'),
-    ];
+    const executablePathsPerOS = {
+      "windows": [
+        runtimeDir.join('bin/Igor.exe'),
+        runtimeDir.join('bin/igor/windows/x64/Igor.exe'),
+      ],
+      "osx": [
+        runtimeDir.join('bin/igor/osx/arm64/Igor'),
+        runtimeDir.join('bin/igor/osx/x64/Igor'),
+        runtimeDir.join('mac/dmg_app.sh'),
+      ],
+      "linux": []
+    };
+    let executablePaths = executablePathsPerOS[currentOs ?? 'windows'];
+
+
     let executablePath: Pathy | undefined;
     for (const path of executablePaths) {
       if (await path.exists()) {
@@ -294,7 +305,7 @@ export async function setActiveRuntime(runtime: {
       (await runtimeConfigFile.exists()) ? await runtimeConfigFile.read() : {};
     currentConfig.active = runtime.version;
     currentConfig[runtime.version] = runtime.directory.toString({
-      format: 'win32',
+      format: os.platform() == 'win32' ? 'win32' : 'posix'
     });
     await runtimeConfigFile.write(JSON.stringify(currentConfig));
   }
@@ -335,11 +346,12 @@ export async function listGameMakerDataDirs(): Promise<Pathy[]> {
   // so we'll use some simple discovery heuristics.
   const potentialDataDirs = (
     await new Pathy(process.env.PROGRAMDATA).listChildren()
-  ).filter((p) => p.basename.match(/^GameMaker/));
+  ).filter((p) => p.basename.match(/^GameMaker/) != null);
   const dataDirs: Pathy[] = [];
   for (const potentialDataDir of potentialDataDirs) {
     const cacheDir = potentialDataDir.join('Cache/runtimes');
     if (await cacheDir.exists()) {
+      console.log("found runtime cacheDir", cacheDir.absolute);
       dataDirs.push(potentialDataDir);
     }
   }
@@ -370,4 +382,18 @@ export async function listInstalledIdes(
       installedIdesOSOptions[process.platform as 'win32' | 'darwin'] as PathyListChildrenOptions;
 
   return await new Pathy(parentDir).listChildrenRecursively(options);
+}
+
+
+
+export function deriveTargetPlatform() {
+  if (process.platform === 'win32') {
+    return 'windows';
+  } else if (process.platform === 'darwin') {
+    return 'mac';
+  } else if (process.platform === 'linux') {
+    return 'linux';
+  } else {
+    throw new Error(`Unsupported platform: ${process.platform}`);
+  }
 }

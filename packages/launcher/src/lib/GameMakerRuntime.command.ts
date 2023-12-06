@@ -15,9 +15,10 @@ import {
 } from './GameMakerRuntime.types.js';
 import {
   artifactExtensionForPlatform,
-  currentOs,
+  currentOs, deriveTargetPlatform,
   projectLogDirectory,
 } from './utility.js';
+import * as console from "console";
 
 export async function executeGameMakerRuntimeInstallCommand(
   runtime: GameMakerRuntime,
@@ -40,7 +41,7 @@ export async function computeOptions(
   runtime: GameMakerRuntime,
   options: GameMakerBuildOptions & { compile?: boolean },
 ) {
-  const target = options?.targetPlatform || 'windows';
+  const target = options?.targetPlatform || deriveTargetPlatform();
   const projectPath = new Pathy(options.project);
   const projectDir = projectPath.up();
   const outputDir = new Pathy(options?.outDir || projectDir);
@@ -75,7 +76,7 @@ export async function computeGameMakerCleanOptions(
   command: 'Clean';
   options: GameMakerExecuteOptions;
 }> {
-  const target = options?.targetPlatform || 'windows';
+  const target = options?.targetPlatform || deriveTargetPlatform();
   const buildOptions = await computeOptions(runtime, options);
   return {
     target,
@@ -92,7 +93,7 @@ export async function computeGameMakerBuildOptions(
   command: 'Run' | 'PackageZip' | 'Package';
   options: GameMakerExecuteOptions;
 }> {
-  const target = options?.targetPlatform || 'windows';
+  const target = options?.targetPlatform || deriveTargetPlatform();
   const command = options?.compile
     ? target === 'windows'
       ? 'PackageZip'
@@ -253,6 +254,8 @@ export async function executeGameMakerCommand<W extends GameMakerCliWorker>(
   const child = spawn(cmd, args, {
     env: childEnv,
     stdio: 'pipe',
+    // Shell is required on mac, as quotes aren't removed otherwise from args
+    shell: currentOs !== 'windows' ? true : undefined
   });
 
   // Set up writeable file streams

@@ -6,7 +6,7 @@ import {
   GameMakerCliWorker,
 } from '../types/gameMakerCli.js';
 import type { GameMakerEngine } from './GameMakerEngine.js';
-import { GameMakerEngineStatic } from './GameMakerEngine.static.js';
+import {GameMakerEngineStatic} from './GameMakerEngine.static.js';
 import {
   GameMakerBuildOptions,
   GameMakerEngineProject,
@@ -14,6 +14,8 @@ import {
   GameMakerExecutionResults,
   GameMakerLogOptions,
 } from './GameMakerEngine.types.js';
+import * as process from "process";
+import {deriveTargetPlatform} from "../utility/platform";
 
 export async function runGameMakerCommand<W extends GameMakerCliWorker>(
   engine: GameMakerEngine,
@@ -119,12 +121,13 @@ export async function runGameMakerCommand<W extends GameMakerCliWorker>(
   });
 }
 
+
 export async function runBuildCommand(
   this: GameMakerEngine,
   project: GameMakerEngineProject,
   options?: GameMakerBuildOptions & { compile?: boolean },
 ) {
-  const target = options?.targetPlatform || 'windows';
+  const target = options?.targetPlatform || deriveTargetPlatform();
   const command = options?.compile
     ? target === 'windows'
       ? 'PackageZip'
