@@ -1,7 +1,7 @@
 {
   "name": "crashlands-editor",
   "displayName": "Crashlands 2 Editor",
-  "version": "0.14.0",
+  "version": "0.15.0",
   "private": true,
   "description": "Tools for Crashlands 2 development.",
   "categories": [
@@ -49,6 +49,16 @@
         "command": "crashlands.open.saveDir",
         "category": "Crashlands",
         "title": "Open Save Folder"
+      },
+      {
+        "command": "crashlands.tree.setFolder",
+        "category": "Crashlands",
+        "title": "Set Folder"
+      },
+      {
+        "command": "crashlands.tree.copyFolderPath",
+        "category": "Crashlands",
+        "title": "Copy Path"
       },
       {
         "command": "crashlands.tree.dropMode.order.enable",
@@ -130,6 +140,18 @@
           "command": "crashlands.tree.dropMode.nest.enable",
           "when": "view == cl2-stories && crashlands.dropMode == 'order'",
           "group": "navigation@1"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "crashlands.tree.setFolder",
+          "when": "view == cl2-stories && viewItem =~ /^mote-/",
+          "group": "navigation@1"
+        },
+        {
+          "command": "crashlands.tree.copyFolderPath",
+          "when": "view == cl2-stories && viewItem == folder",
+          "group": "9_cutcopypaste@1"
         }
       ]
     },
