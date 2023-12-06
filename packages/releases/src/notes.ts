@@ -36,11 +36,21 @@ export async function listReleaseNotes(
 				continue;
 			}
 			console.info('Notes cache miss:', url);
-			const note = await fetchJson(url, rawReleaseNoteSchema);
-			cacheData[url] = {
-				type,
-				...rawReleaseNoteSchema.parse(note),
-			};
+			try {
+				const note = await fetchJson(url, rawReleaseNoteSchema);
+				cacheData[url] = {
+					type,
+					...rawReleaseNoteSchema.parse(note),
+				};
+			} catch (err) {
+				console.info(`Error fetching release notes from ${url}:`, err);
+				cacheData[url] = {
+					type,
+					version: release[type].version,
+					release_notes: [],
+				};
+			}
+
 			await cachePath.write(cacheData);
 		}
 	}
