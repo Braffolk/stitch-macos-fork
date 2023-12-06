@@ -7,10 +7,17 @@ import {
 } from './feeds.js';
 import { rawReleaseNotesCacheSchema } from './feeds.types.js';
 
-const notesCache = pathy('release-notes-cache.json').withValidator(
-  rawReleaseNotesCacheSchema,
-);
-const tmpSummaryPath = pathy('releases-summary.json');
+const notesCacheWin = pathy('release-notes-cache-win.json')
+    .withValidator(rawReleaseNotesCacheSchema,);
+const tmpSummaryPathWin = pathy('releases-summary-win.json');
+
+const notesCacheMac = pathy('release-notes-cache-mac.json')
+    .withValidator(rawReleaseNotesCacheSchema,);
+const tmpSummaryPathMac = pathy('releases-summary-mac.json');
+
+const notesCacheLinux = pathy('release-notes-cache-linux.json')
+    .withValidator(rawReleaseNotesCacheSchema,);
+const tmpSummaryPathLinux = pathy('releases-summary-linux.json');
 
 const sampleReleaseNotesPath = pathy('samples/release_notes.json');
 
@@ -33,13 +40,14 @@ describe('Release Feeds', function () {
     expect(cleaned.changes.groups[0].changes.length).to.equal(2);
   });
 
-  it('can create a centralized GameMaker Releases database', async function () {
-    const releases = await computeReleasesSummary();
+  it('Windows: can create a centralized GameMaker Releases database', async function () {
+    const releases = await computeReleasesSummary('win');
     const withNotes = await computeReleasesSummaryWithNotes(
+      'win',
       releases,
-      notesCache,
+      notesCacheWin
     );
-    await tmpSummaryPath.write(withNotes);
+    await tmpSummaryPathWin.write(withNotes);
     expect(withNotes.length).to.be.greaterThan(0);
     expect(withNotes.every((r) => r.channel)).to.exist;
     for (const type of ['ide', 'runtime'] as const) {
@@ -50,6 +58,52 @@ describe('Release Feeds', function () {
     }
     const sampleRelease = withNotes.find(
       (r) => r.runtime.version === '2022.1100.0.259',
+    )!;
+    expect(sampleRelease.runtime.notes.groups).to.exist;
+    expect(sampleRelease.runtime.notes.groups.length).to.be.greaterThan(0);
+  });
+
+  it('MacOS: can create a centralized GameMaker Releases database', async function () {
+    const releases = await computeReleasesSummary('mac');
+    const withNotes = await computeReleasesSummaryWithNotes(
+        'mac',
+        releases,
+        notesCacheMac,
+    );
+    await tmpSummaryPathMac.write(withNotes);
+    expect(withNotes.length).to.be.greaterThan(0);
+    expect(withNotes.every((r) => r.channel)).to.exist;
+    for (const type of ['ide', 'runtime'] as const) {
+      expect(withNotes.every((r) => r[type])).to.exist;
+      expect(withNotes.every((r) => r[type].version)).to.exist;
+      expect(withNotes.every((r) => r[type].notes)).to.exist;
+      expect(withNotes.every((r) => r[type].notes.groups)).to.exist;
+    }
+    const sampleRelease = withNotes.find(
+        (r) => r.runtime.version === '2022.1100.0.259',
+    )!;
+    expect(sampleRelease.runtime.notes.groups).to.exist;
+    expect(sampleRelease.runtime.notes.groups.length).to.be.greaterThan(0);
+  });
+
+  it('Linux: can create a centralized GameMaker Releases database', async function () {
+    const releases = await computeReleasesSummary('mac');
+    const withNotes = await computeReleasesSummaryWithNotes(
+        'linux',
+        releases,
+        notesCacheLinux,
+    );
+    await tmpSummaryPathLinux.write(withNotes);
+    expect(withNotes.length).to.be.greaterThan(0);
+    expect(withNotes.every((r) => r.channel)).to.exist;
+    for (const type of ['ide', 'runtime'] as const) {
+      expect(withNotes.every((r) => r[type])).to.exist;
+      expect(withNotes.every((r) => r[type].version)).to.exist;
+      expect(withNotes.every((r) => r[type].notes)).to.exist;
+      expect(withNotes.every((r) => r[type].notes.groups)).to.exist;
+    }
+    const sampleRelease = withNotes.find(
+        (r) => r.runtime.version === '2022.1100.0.259',
     )!;
     expect(sampleRelease.runtime.notes.groups).to.exist;
     expect(sampleRelease.runtime.notes.groups.length).to.be.greaterThan(0);

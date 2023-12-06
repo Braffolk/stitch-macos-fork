@@ -15,11 +15,13 @@ import {
 import { listReleaseNotes } from './notes.js';
 import { ideFeedUrls, runtimeFeedUrls } from './urls.js';
 
+
 export async function computeReleasesSummaryWithNotes(
-  releases?: GameMakerRelease[],
-  cache: Pathy | string = defaultNotesCachePath,
+  os: 'win' | 'mac' | 'linux',
+	releases?: GameMakerRelease[],
+	cache: Pathy | string = defaultNotesCachePath
 ): Promise<GameMakerReleaseWithNotes[]> {
-  releases ||= await computeReleasesSummary();
+  releases ||= await computeReleasesSummary(os);
   const notes = await listReleaseNotes(releases, cache);
   const withNotes: GameMakerReleaseWithNotes[] = [];
   const emptyChanges = {
@@ -48,9 +50,9 @@ export async function computeReleasesSummaryWithNotes(
   return z.array(gameMakerReleaseWithNotesSchema).parse(withNotes);
 }
 
-export async function computeReleasesSummary(): Promise<GameMakerRelease[]> {
-  const ideArtifacts = await listArtifacts('ide');
-  const runtimeArtifacts = await listArtifacts('runtime');
+export async function computeReleasesSummary(os: 'win' | 'mac' | 'linux'): Promise<GameMakerRelease[]> {
+  const ideArtifacts = await listArtifacts('ide', os);
+  const runtimeArtifacts = await listArtifacts('runtime', os);
   const releases: GameMakerRelease[] = [];
   for (let i = 0; i < ideArtifacts.length; i++) {
     const ide = ideArtifacts[i];
@@ -76,9 +78,11 @@ export async function computeReleasesSummary(): Promise<GameMakerRelease[]> {
   return z.array(gameMakerReleaseSchema).parse(releases);
 }
 
-async function listArtifacts(type: ArtifactType): Promise<GameMakerArtifact[]> {
+async function listArtifacts(type: ArtifactType, os: 'mac' | 'win' | 'linux'): Promise<GameMakerArtifact[]> {
   const entries: GameMakerArtifact[] = [];
-  const urls = type === 'ide' ? ideFeedUrls() : runtimeFeedUrls();
+  const urls = type === 'ide'
+		? ideFeedUrls(os)
+		: runtimeFeedUrls();
   const feeds = await Promise.all(
     channels.map((channel) => downloadRssFeed(urls[channel])),
   );
