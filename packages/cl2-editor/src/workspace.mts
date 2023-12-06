@@ -6,8 +6,8 @@ import { GameChangerFs } from './gc.fs.mjs';
 import { QuestCompletionProvider } from './quests.autocompletes.mjs';
 import { StoryFoldingRangeProvider } from './quests.folding.mjs';
 import { QuestHoverProvider } from './quests.hover.mjs';
-import { QuestTreeProvider } from './quests.mjs';
 import { QuestWorkspaceSymbolProvider } from './quests.symbols.mjs';
+import { QuestTreeProvider } from './quests.tree.mjs';
 import { isQuestUri, parseGameChangerUri } from './quests.util.mjs';
 
 export class CrashlandsWorkspace {
@@ -30,6 +30,12 @@ export class CrashlandsWorkspace {
       ...QuestHoverProvider.register(this.workspace),
       ...QuestCompletionProvider.register(this.workspace),
       ...QuestWorkspaceSymbolProvider.register(this.workspace),
+      vscode.commands.registerCommand('crashlands.open.saveDir', async () => {
+        await vscode.commands.executeCommand(
+          'vscode.openFolder',
+          vscode.Uri.file(packed.projectSaveDir.absolute),
+        );
+      }),
       vscode.workspace.onDidChangeTextDocument((event) => {
         if (!isQuestUri(event.document.uri)) {
           return;

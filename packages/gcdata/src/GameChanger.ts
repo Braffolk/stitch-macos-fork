@@ -44,6 +44,32 @@ export class Gcdata {
     };
   }
 
+  getAncestors(
+    ofMoteId: Mote | string,
+    options?: {
+      /** If true, circularity will cause an early return of the parents rather than throwing. */
+      ignoreCircularity: boolean;
+    },
+  ): Mote[] {
+    const mote = this.getMote(ofMoteId);
+    assert(mote, `Cannot get parents: mote not found ${ofMoteId}`);
+    const hierarchy: Mote[] = [];
+    let parent: Mote | undefined = this.getMote(mote.parent)!;
+    const seen = new Set<string>();
+    while (parent) {
+      hierarchy.push(parent);
+      parent = this.getMote(parent.parent);
+      // Prevent infinite loops
+      if (parent && seen.has(parent.id)) {
+        if (options?.ignoreCircularity) break;
+        throw new Error(`Mote ${parent.id} is in a circular hierarchy!`);
+      } else if (parent) {
+        seen.add(parent.id);
+      }
+    }
+    return hierarchy.reverse();
+  }
+
   getMoteNamePointer(mote: Mote | string | undefined): string | undefined {
     if (!mote) return undefined;
     const foundMote = this.getMote(mote);
@@ -106,6 +132,10 @@ export class GameChanger {
     return this.base.data;
   }
 
+  get projectSaveDir() {
+    return GameChanger.projectSaveDir(this.projectName);
+  }
+
   clearMoteChanges(moteId: string) {
     delete this.changes.changes.motes?.[moteId];
     // Re-clone the base data to reset the working data
@@ -114,6 +144,59 @@ export class GameChanger {
       this.working.data.motes[moteId] = structuredClone(
         this.base.data.motes[moteId],
       );
+    }
+  }
+
+  updateMoteLocation(
+    moteId: string,
+    newParentId: string | undefined,
+    newFolder: string | undefined,
+  ) {
+    assert(moteId && typeof moteId === 'string', 'Must specify mote ID');
+    assert(
+      newParentId === undefined || typeof newParentId === 'string',
+      'Parent ID must be a string or undefined',
+    );
+    assert(
+      newFolder === undefined ||
+        (typeof newFolder === 'string' && newFolder.length > 0),
+      'Folder must be a string or undefined',
+    );
+    const mote = this.working.getMote(moteId);
+    assert(mote, `Cannot update non-existent mote ${moteId}`);
+    const parent = newParentId ? this.working.getMote(newParentId) : undefined;
+    assert(
+      parent || newParentId === undefined,
+      `Cannot find mote ${newParentId}`,
+    );
+
+    setValueAtPointer(this.working.data.motes[moteId], 'parent', parent?.id);
+    setValueAtPointer(this.working.data.motes[moteId], 'folder', newFolder);
+
+    // See if we have a change relative to the base
+    const baseMote = this.base.getMote(moteId);
+    const baseParent = baseMote?.parent;
+    let changedParent = baseParent !== parent?.id;
+    let changedFolder = baseMote?.folder !== newFolder;
+    if (!changedParent) {
+      // Then we haven't changed from the base data, but
+      // we might be *undoing* a working data change.
+      delete this.changes.changes.motes?.[moteId]?.diffs?.parent;
+    } else {
+      this.createChange('motes', moteId, {
+        type: 'changed',
+        pointer: 'parent',
+        newValue: parent?.id,
+      });
+    }
+    if (!changedFolder) {
+      delete this.changes.changes.motes?.[moteId]?.diffs?.folder;
+    } else {
+      this.createChange('motes', moteId, {
+        type: 'changed',
+        pointer: 'folder',
+        newValue: newFolder,
+      });
     }
   }
 

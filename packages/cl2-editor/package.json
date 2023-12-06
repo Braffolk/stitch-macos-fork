@@ -1,7 +1,7 @@
 {
   "name": "crashlands-editor",
   "displayName": "Crashlands 2 Editor",
-  "version": "0.13.0",
+  "version": "0.14.0",
   "private": true,
   "description": "Tools for Crashlands 2 development.",
   "categories": [
@@ -36,12 +36,33 @@
       {
         "command": "crashlands.quests.enter",
         "enablement": "editorLangId == 'cl2-quest'",
+        "category": "Crashlands",
         "title": "On Enter"
       },
       {
         "command": "crashlands.editor.backup.restore",
         "enablement": "editorLangId == 'cl2-quest'",
-        "title": "Crashlands: Restore Backup"
+        "category": "Crashlands",
+        "title": "Restore Backup"
+      },
+      {
+        "command": "crashlands.open.saveDir",
+        "category": "Crashlands",
+        "title": "Open Save Folder"
+      },
+      {
+        "command": "crashlands.tree.dropMode.order.enable",
+        "title": "Enable Order Mode (Drag/Drop)",
+        "category": "Crashlands",
+        "shortTitle": "Enable Order Mode",
+        "icon": "$(list-flat)"
+      },
+      {
+        "command": "crashlands.tree.dropMode.nest.enable",
+        "title": "Enable Nesting Mode (Drag/Drop)",
+        "category": "Crashlands",
+        "shortTitle": "Enable Nesting Mode",
+        "icon": "$(list-tree)"
       }
     ],
     "configuration": {
@@ -98,13 +119,25 @@
           "command": "crashlands.editor.backup.restore",
           "when": "editorLangId == 'cl2-quest'"
         }
+      ],
+      "view/title": [
+        {
+          "command": "crashlands.tree.dropMode.order.enable",
+          "when": "view == cl2-stories && crashlands.dropMode == 'nest'",
+          "group": "navigation@1"
+        },
+        {
+          "command": "crashlands.tree.dropMode.nest.enable",
+          "when": "view == cl2-stories && crashlands.dropMode == 'order'",
+          "group": "navigation@1"
+        }
       ]
     },
     "views": {
       "cl2": [
         {
           "id": "cl2-stories",
-          "name": "Stories",
+          "name": "Motes",
           "icon": "./images/cl2-editor-logo.svg",
           "type": "tree"
         }
@@ -114,7 +147,7 @@
       "activitybar": [
         {
           "id": "cl2",
-          "title": "Crashlands 2",
+          "title": "Crashlands",
           "icon": "./images/cl2-editor-logo.svg"
         }
       ]
@@ -124,9 +157,11 @@
     "onLanguage:cl2-quest",
     "workspaceContains:**/*.{yyp}"
   ],
+  "dependencies": {
+    "@bscotch/gcdata": "workspace:*"
+  },
   "devDependencies": {
     "@bscotch/emitter": "0.2.1",
-    "@bscotch/gcdata": "workspace:*",
     "@bscotch/pathy": "^2.12.0",
     "@bscotch/trebuchet": "2.9.3",
     "@bscotch/utility": "^7.2.0",
