@@ -5,12 +5,23 @@
 
 # MACOS NOTES:
 
-For testing purposes, the following summary files is used:
+This fork attempts to get the Stitch extension for VSCode to work on MacOS without any issues.
+
+For testing purposes, the following summary file is used:
 https://stitch-mac.s3.eu-central-1.amazonaws.com/releases-summary-mac.json
 
 process.env for MacOS:
 - PROGRAMFILES: /Users/account-here/Applications
 - PROGRAMDATA: /Users/Shared/
+
+Finished, but not cleaned up:
+1. Releases package:
+  - Can correctly handle MacOS runtime/ide urls.
+2. Launcher package:
+  - Downloading runtime/ide files.
+  - Listing runtime/ide files.
+  - Installing IDEs
+  - Caching runtime/ide files.
 
 TODO:
 - releases-summary.json generation and runtime/ide urls should be OS specific.
