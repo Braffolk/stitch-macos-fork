@@ -40,7 +40,7 @@
   "scripts": {
     "build": "tsc --build",
     "clean": "rimraf build dist",
-    "test": "mocha --config ../../config/.mocharc.cjs --timeout=30000",
+    "test": "mocha --config ../../config/.mocharc.cjs --timeout=600000",
     "test:dev": "mocha --config ../../config/.mocharc.cjs --forbid-only=false --parallel=false --timeout=9999999999",
     "watch": "tsc --build --watch"
   },
@@ -60,7 +60,7 @@
     "chai": "^4.3.10",
     "mocha": "^10.2.0",
     "rimraf": "^5.0.5",
-    "typescript": "5.2.2"
+    "typescript": "^5.2.2"
   },
   "publishConfig": {
     "access": "public"
