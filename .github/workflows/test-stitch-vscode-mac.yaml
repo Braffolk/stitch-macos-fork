@@ -35,11 +35,7 @@ jobs:
         run: |
           pnpm config set pnpm-prefix ~/.pnpm-global
           echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
-
-      # Remove any existing pnpm-lock.yaml files, which are
-      # both platform-specific and will likely halt the build.
-      - name: Remove pnpm-lock.yaml
-        run: rm -f pnpm-lock.yaml
+          rm -f pnpm-lock.yaml
 
       # Cache for faster tests
       - uses: actions/cache/save@v3
@@ -114,7 +110,7 @@ jobs:
           curl -L https://gm2016.yoyogames.com/9a3cbb36-96ee-48af-851b-8d77737a7a0b.zip \
             -o "$PATH_RUNTIME/download/9a3cbb36-96ee-48af-851b-8d77737a7a0b.zip"
 
-          "/Applications/GameMaker Studio 2 Beta.app/Contents/MacOS/GameMaker"
+          "/Applications/GameMaker Studio 2 Beta.app/Contents/MacOS/GameMaker Studio 2"
 
 
       # Wait for GMS runtime
