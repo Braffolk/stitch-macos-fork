@@ -109,6 +109,18 @@ jobs:
           # Windows
           curl -L https://gm2016.yoyogames.com/9a3cbb36-96ee-48af-851b-8d77737a7a0b.zip \
             -o "$PATH_RUNTIME/download/9a3cbb36-96ee-48af-851b-8d77737a7a0b.zip"
+          
+          # Create file runtime.json to set default runtime
+          RUNTIME_JSON=$(cat <<EOF
+          {
+              "active": "2022.300.0.478",
+              "2022.300.0.478": "/Users/Shared/GameMakerStudio2/Cache/runtimes/runtime-2022.300.0.478&https://gms.yoyogames.com/Zeus-Runtime-Beta.rss"
+          }
+          EOF)
+
+          echo "$RUNTIME_JSON" > "${PROGRAMDATA}GameMakerStudio2-Beta/runtime.json"
+
+
 
           "/Applications/GameMaker Studio 2 Beta.app/Contents/MacOS/GameMaker Studio 2" &
             PID=$!
