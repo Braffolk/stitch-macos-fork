@@ -110,7 +110,10 @@ jobs:
           curl -L https://gm2016.yoyogames.com/9a3cbb36-96ee-48af-851b-8d77737a7a0b.zip \
             -o "$PATH_RUNTIME/download/9a3cbb36-96ee-48af-851b-8d77737a7a0b.zip"
 
-          "/Applications/GameMaker Studio 2 Beta.app/Contents/MacOS/GameMaker Studio 2"
+          "/Applications/GameMaker Studio 2 Beta.app/Contents/MacOS/GameMaker Studio 2" &
+            PID=$!
+            sleep 30
+            kill $PID
 
 
       # Wait for GMS runtime
