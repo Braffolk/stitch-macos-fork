@@ -232,7 +232,7 @@ export class GameMakerIde extends GameMakerComponent {
             false,
             `Could not find version ${version} after installation. Installation might have gone `
             + `to an unexpected location or the installer might have failed.\n`
-            + `Installed versions: ${_installed.join(', ')}`
+            + `Installed versions: [${_installed.join(', ')}]`
           );
         }
         await installerPath.delete();
@@ -310,6 +310,7 @@ export class GameMakerIde extends GameMakerComponent {
         'Applications',
       );
       const systemApplications = new Pathy('/Applications');
+      console.log("listDirectlyInstalled", userApplications, systemApplications)
       return [
         ...(await GameMakerIde.listInstalledInDir(userApplications)),
         ...(await GameMakerIde.listInstalledInDir(systemApplications)),
