@@ -14,7 +14,7 @@ defaults:
     shell: bash
 
 jobs:
-  publish:
+  publish-mac:
     runs-on: macos-latest
     steps:
       # SETUP
@@ -39,9 +39,9 @@ jobs:
 
 
       - name: BuildVSCodePackage
-        run:
-          cd packages/vscode
-          pnpm install .
+        run: |
+          cd packages/vscode && \
+          pnpm install . && \
           pnpm build
 
       - name: CreateVSCodePackage
