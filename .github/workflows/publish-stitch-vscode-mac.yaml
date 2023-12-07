@@ -40,6 +40,7 @@ jobs:
 
 
       - run: cd packages/vscode
+      - run: pnpm install .
 
       - name: CreateVSCodePackage
         run: pnpm vsce package --no-dependencies --githubBranch develop --out bscotch-stitch-vscode-mac.vsix
