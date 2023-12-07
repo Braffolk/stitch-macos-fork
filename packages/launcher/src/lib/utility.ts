@@ -367,7 +367,7 @@ const installedIdesOSOptions = {
     darwin: {
         maxDepth: 1,
         filter: (path: Pathy): boolean => path.basename
-            .match(/GameMaker(Studio2?)?((-| )(Beta|LTS))?\.app|gamemaker-.*\.app$/) != null,
+            .match(/GameMaker ?(Studio ?2?)?((-| )(Beta|LTS))?\.app|gamemaker-.*\.app$/) != null,
         includeDirs: 'only',
     }
 };
