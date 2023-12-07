@@ -87,4 +87,5 @@ jobs:
             This is an auto-generated release for ${{ github.ref }}.
             It contains the latest version of the MacOS Stitch for VSCode extension.
           token: ${{ secrets.GITHUB_TOKEN }}
-          tag: ${{ github.ref }}
+          tag: stitch-vscode-mac
+          name: Stitch VSCode for MacOS  ${{ github.ref }}
