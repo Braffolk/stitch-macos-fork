@@ -394,13 +394,11 @@ export async function listInstalledIdes(
     if (!parentDir) {
       const userApplications = new Pathy(`${os.homedir()}/Applications`);
       const systemApplications = new Pathy('/Applications');
-      console.log('userApplications path', userApplications.absolute);
-      console.log('systemApplications path', systemApplications.absolute);
-      const userApplicationsChildren = await userApplications.listChildrenRecursively(options);
-      const systemApplicationsChildren = await systemApplications.listChildrenRecursively(options);
-      const installed = [...userApplicationsChildren, ...systemApplicationsChildren];
-      console.log('installed ides', installed.map(p => p.absolute));
-      return installed;
+
+      return [userApplications, systemApplications]
+        .filter(p => p.existsSync())
+        .map(p => p.listChildrenRecursively(options))
+        .flat();
     } else {
       return await new Pathy(parentDir).listChildrenRecursively(options);
     }

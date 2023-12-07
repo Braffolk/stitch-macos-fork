@@ -311,13 +311,9 @@ export class GameMakerIde extends GameMakerComponent {
           'Applications',
         );
         const systemApplications = new Pathy('/Applications');
-        console.log("listDirectlyInstalled",
-          userApplications.absolute,
-          systemApplications.absolute);
-        return [
-          ...(await GameMakerIde.listInstalledInDir(userApplications)),
-          ...(await GameMakerIde.listInstalledInDir(systemApplications))
-        ];
+        return [userApplications, systemApplications]
+            .filter(p => p.exists())
+            .flatMap(p => GameMakerIde.listInstalledInDir(p));
       } else {
         const applications = new Pathy(programFiles);
         return await GameMakerIde.listInstalledInDir(applications);
