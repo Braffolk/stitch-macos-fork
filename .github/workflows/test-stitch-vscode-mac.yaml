@@ -72,11 +72,17 @@ jobs:
           sudo installer -pkg gms.pkg -target $PROGRAMFILES -verbose
       
       - name: Wait for runtime
-      # wait till the runtime is installed
         run: |
-          while [ ! -f ${PROGRAMDATA}Users/Shared/GameMakerStudio2-Beta/Cache/runtimes/runtime-2022.300.0.478/bin/Igor.exe ]; do
+          attempts=0
+          max_attempts=30
+          while [ ! -f ${PROGRAMDATA}GameMakerStudio2-Beta/Cache/runtimes/runtime-2022.300.0.478/bin/Igor.exe ]; do
             echo "Waiting for Igor to appear..."
-            sleep 2
+            sleep 4
+            ((attempts++))
+            if [ $attempts -eq $max_attempts ]; then
+              echo "Timeout waiting for Igor"
+              exit 1
+            fi
           done
 
       # Debug - list files in /Applications
