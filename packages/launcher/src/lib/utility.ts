@@ -383,7 +383,7 @@ const installedIdesOSOptions = {
 
 export async function listInstalledIdes(
   parentDir?: string | Pathy
-) {
+): Promise<Pathy[]> {
   assert (process.platform === 'win32' || process.platform === 'darwin', 'Only Windows and mac are supported');
 
   const options =
@@ -395,10 +395,11 @@ export async function listInstalledIdes(
       const userApplications = new Pathy(`${os.homedir()}/Applications`);
       const systemApplications = new Pathy('/Applications');
 
-      return [userApplications, systemApplications]
+      const paths = [userApplications, systemApplications]
         .filter(p => p.existsSync())
         .map(p => p.listChildrenRecursively(options))
         .flat();
+      return Promise.all(paths).then(v => v.flat());
     } else {
       return await new Pathy(parentDir).listChildrenRecursively(options);
     }

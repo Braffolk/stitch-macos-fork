@@ -303,7 +303,7 @@ export class GameMakerIde extends GameMakerComponent {
   @trace
   protected static async listDirectlyInstalled(
     programFiles?: string
-  ) {
+  ): Promise<GameMakerIde[]> {
     if (process.platform === 'darwin') {
       // List both /Applications and ~/Applications
       if (!programFiles) {
@@ -311,9 +311,10 @@ export class GameMakerIde extends GameMakerComponent {
           'Applications',
         );
         const systemApplications = new Pathy('/Applications');
-        return [userApplications, systemApplications]
+        const paths = [userApplications, systemApplications]
             .filter(p => p.exists())
             .flatMap(p => GameMakerIde.listInstalledInDir(p));
+        return Promise.all(paths).then(v => v.flat());
       } else {
         const applications = new Pathy(programFiles);
         return await GameMakerIde.listInstalledInDir(applications);
