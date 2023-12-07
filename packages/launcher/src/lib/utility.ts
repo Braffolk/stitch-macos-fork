@@ -251,7 +251,9 @@ export async function listInstalledRuntimes(): Promise<
       ],
       "osx": [
         runtimeDir.join('bin/igor/osx/arm64/Igor'),
-        runtimeDir.join('bin/igor/osx/x64/Igor')
+        runtimeDir.join('bin/igor/osx/x64/Igor'),
+        // on older versions, MacOS builds use Mono + Igor.exe
+        runtimeDir.join('bin/Igor.exe'),
       ],
       "linux": []
     };
