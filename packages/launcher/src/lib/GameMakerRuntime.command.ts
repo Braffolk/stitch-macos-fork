@@ -221,7 +221,11 @@ export function computeGameMakerCommand<W extends GameMakerCliWorker>(
       return arg + `=${value}`;
     })
     .filter((x) => x) as string[];
-  const cmd = runtime.executablePath.absolute;
+  let cmd = runtime.executablePath.absolute;
+  if (cmd.endsWith('.exe') && process.platform == "darwin") {
+    // Older mono version.
+    cmd = `"/Library/Frameworks/Mono.framework/Versions/Current/Commands/mono" "${cmd}"`;
+  }
   args = [...args, '--', worker, ...arrayWrapped(command)];
   return {
     cmd,

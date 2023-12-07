@@ -90,6 +90,24 @@ Since I don't work with Node daily, I might have missed some things. Here are so
     Not sure if this will work with the build process of Stitch.
 
 
+## CLI
+
+CLI differs between runtime versions. Older runtimes rely on mono and hence have a different syntax.
+
+Mono install new runtime:
+```
+"/Library/Frameworks/Mono.framework/Versions/Current/Commands/mono" /Users/Shared/GameMakerStudio2-Beta/Cache/runtimes/runtime-2022.300.0.478/bin/Igor.exe -user=/Users/.../.config/GameMakerStudio2-Beta/... --runtimePath=/Users/Shared/GameMakerStudio2-Beta/Cache/runtimes --runtimeUrl=https://gms.yoyogames.com/Zeus-Runtime-NuBeta.rss --verbose -- runtime Install 2022.600.0.121
+```
+
+Mono run project (from current directory):
+"/Library/Frameworks/Mono.framework/Versions/Current/Commands/mono"  /Users/Shared/GameMakerStudio2-Beta/Cache/runtimes/runtime-2022.300.0.478/bin/Igor.exe -j=8 -options="/tmp/GameMakerStudio2-Beta/GMS2TEMP/build.bff" -v -- Mac Run
+
+
+Igor install new runtime:
+
+
+
+
 # Stitch Monorepo
 
 [Butterscotch Shenanigans](https://www.bscotch.net) ("Bscotch") develops and maintains a collection of tools for management of [GameMaker](https://gamemaker.io) projects. These tools are collected under the umbrella trademark "Stitch".

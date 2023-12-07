@@ -153,16 +153,36 @@ export class GameMakerEngine extends GameMakerEngineStatic {
   }
 
   /**
-   * Path to the most recently used rumtime CLI executable.
+   * Path to the most recently used runtime CLI executable.
    */
   async cliPath(): Promise<Pathy> {
-    return (await this.runtimeDirectory()).join(
-      'bin',
-      'igor',
-      this.currentOs,
-      this.currentArchitecture,
-      `Igor${this.currentOs === 'windows' ? '.exe' : ''}`,
-    );
+    if (this.currentOs != "osx") {
+      return (await this.runtimeDirectory()).join(
+        'bin',
+        'igor',
+        this.currentOs,
+        this.currentArchitecture,
+        `Igor${this.currentOs === 'windows' ? '.exe' : ''}`,
+      );
+    } else {
+      const pathIgorExe = (await this.runtimeDirectory()).join(
+        'bin',
+        'igor',
+        `Igor.exe`,
+      );
+      const pathIgorScript = (await this.runtimeDirectory()).join(
+        'bin',
+        'igor',
+        this.currentOs,
+        this.currentArchitecture,
+        `Igor`,
+      );
+      if (await pathIgorScript.exists()) {
+        return pathIgorScript;
+      } else {
+        return pathIgorExe;
+      }
+    }
   }
 
   /**
