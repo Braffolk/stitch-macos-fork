@@ -55,6 +55,8 @@ jobs:
           echo "APPDATA=$HOME/.config" >> $GITHUB_ENV
           echo "PROGRAMFILES=/Applications" >> $GITHUB_ENV
           echo "PROGRAMDATA=/Users/Shared/" >> $GITHUB_ENV
+          echo "IDEVERSION=2022.300.0.488" >> $GITHUB_ENV
+          echo "RUNTIMEVERSION=2022.300.0.478" >> $GITHUB_ENV
 
       - name: Make dirs if they don't exist
         run: |
@@ -66,7 +68,7 @@ jobs:
       # Install GMS
       - name: Install GMS
         run: |
-          curl -L https://gms.yoyogames.com/GameMakerStudio2-2022.300.0.488.pkg -o gms.pkg
+          curl -L https://gms.yoyogames.com/GameMakerStudio2-$IDEVERSION.pkg -o gms.pkg
           sudo installer -pkg gms.pkg -target /Applications -verbose
       
       # Debug - list files in /Applications
@@ -90,46 +92,17 @@ jobs:
       # Install GMS runtime
       - name: Install runtime
         run: |
-          PATH_RUNTIME="${PROGRAMDATA}GameMakerStudio2-Beta/Cache/runtimes/runtime-2022.300.0.478"
-          mkdir -p "$PATH_RUNTIME/download"
-
-          # General
-          curl -L https://gm2016.yoyogames.com/b5bacc1c-45d8-4116-8583-12b6fbf3fac5.zip \
-            -o "$PATH_RUNTIME/download/b5bacc1c-45d8-4116-8583-12b6fbf3fac5.zip"
-
-          # Mac
-          curl -L https://gm2016.yoyogames.com/93106ab6-4cb8-4c1a-bb8f-74851ba0cf6f.zip \
-            -o "$PATH_RUNTIME/download/93106ab6-4cb8-4c1a-bb8f-74851ba0cf6f.zip"
-
-          # Mac YYC
-          curl -L https://gm2016.yoyogames.com/61d122b9-0176-4056-9cc4-8d412cc2429d.zip \
-            -o "$PATH_RUNTIME/download/61d122b9-0176-4056-9cc4-8d412cc2429d.zip"
-
-
-          # Windows
-          curl -L https://gm2016.yoyogames.com/9a3cbb36-96ee-48af-851b-8d77737a7a0b.zip \
-            -o "$PATH_RUNTIME/download/9a3cbb36-96ee-48af-851b-8d77737a7a0b.zip"
+          PATH_RUNTIME="${PROGRAMDATA}GameMakerStudio2-Beta/Cache/runtimes/runtime-$RUNTIMEVERSION"
+          PATH_IGOR_ENTRY="./.github/workflows/igor-2022.200.0.452/Igor.exe"
           
-          # Create file runtime.json to set default runtime
-          RUNTIME_JSON=$(cat <<EOF
-          {
-              "active": "2022.300.0.478",
-              "2022.300.0.478": "/Users/Shared/GameMakerStudio2/Cache/runtimes/runtime-2022.300.0.478&https://gms.yoyogames.com/Zeus-Runtime-Beta.rss"
-          }
-          EOF)
-
-          echo "$RUNTIME_JSON" > "${PROGRAMDATA}GameMakerStudio2-Beta/runtime.json"
+          "/Library/Frameworks/Mono.framework/Versions/Current/Commands/mono" "$PATH_IGOR_ENTRY" \
+            -user=$APPDATA/.config/GameMakerStudio2-Beta/... \
+            --runtimePath=$PROGRAMDATA/GameMakerStudio2-Beta/Cache/runtimes \
+            --runtimeUrl=https://gms.yoyogames.com/Zeus-Runtime-NuBeta.rss \
+            --verbose -- runtime Install $RUNTIMEVERSION
 
 
-
-          "/Applications/GameMaker Studio 2 Beta.app/Contents/MacOS/GameMaker Studio 2" &
-            PID=$!
-            sleep 30
-            kill $PID
-
-
-      # Wait for GMS runtime
-      - name: Wait for runtime
+      - name: Confirm runtime
         run: |
           sleep 5
           if [ ! -d "${PROGRAMDATA}GameMakerStudio2-Beta" ]; then
@@ -137,23 +110,10 @@ jobs:
             exit 1
           fi
 
-          attempts=0
-          max_attempts=120
-          while [ ! -f "${PROGRAMDATA}GameMakerStudio2-Beta/Cache/runtimes/runtime-2022.300.0.478/bin/Igor.exe" ]; do
-            echo "Waiting for Igor to appear... ($attempts/$max_attempts)"
-            sleep 4
-            ((attempts++))
-            if [ $attempts -eq $max_attempts ]; then
-              echo "Timeout waiting for Igor"
-              echo "Cache/runtimes tree:"
-              ls -la "${PROGRAMDATA}GameMakerStudio2-Beta/Cache/runtimes"
-
-              echo "runtime-2022.300.0.478 tree:"
-              ls -la "${PROGRAMDATA}GameMakerStudio2-Beta/Cache/runtimes/runtime-2022.300.0.478"
-
-              exit 1
-            fi
-          done
+          if [ ! -f "${PROGRAMDATA}GameMakerStudio2-Beta/Cache/runtimes/runtime-$RUNTIMEVERSION/bin/Igor.exe" ]; then
+            echo "File ${PROGRAMDATA}GameMakerStudio2-Beta/Cache/runtimes/runtime-$RUNTIMEVERSION/bin/Igor.exe does not exist."
+            exit 1
+          fi
 
 
       # Install dependencies
