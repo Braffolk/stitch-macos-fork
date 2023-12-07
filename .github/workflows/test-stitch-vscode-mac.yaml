@@ -3,8 +3,6 @@ name: Test Stitch for VSCode on MacOS
 on:
   workflow_dispatch:
   push:
-    tags:
-      - 'bscotch-stitch-vscode@*'
 
 permissions:
   contents: write
@@ -27,7 +25,7 @@ jobs:
 
       # Remove any existing pnpm-lock.yaml files, which are
       # both platform-specific and will likely halt the build.
-      - run: find $(pwd) -name pnpm-lock.yaml -delete
+      - run: rm -f $(pwd)/**/pnpm-lock.yaml
 
       - run: corepack enable
       - run: pnpm install --filter=bscotch-stitch-vscode... --filter=stitch-monorepo
@@ -39,16 +37,14 @@ jobs:
 
       # TEST
       - name: Test
+        continue-on-error: true
         run: pnpm turbo run test --only --filter=bscotch-stitch-vscode...
 
-      # Leave a comment
-      - name: Create commit comment
-        uses: peter-evans/commit-comment@v3
-        with:
-          body: |
-            This is a multi-line test comment
-            - With GitHub **Markdown** :sparkles:
-            - Created by [commit-comment][1]
 
-            [1]: https://github.com/peter-evans/commit-comment
-          reactions: '+1'
+      - name: Test Report
+        uses: dorny/test-reporter@v1
+        if: success() || failure()    # run this step even if previous step failed
+        with:
+          name: test-results-mac            # Name of the check run which will be created
+          path: reports/test-macos-*.xml    # Path to test results
+          reporter: jest-junit        # Format of test results
