@@ -246,8 +246,7 @@ export async function listInstalledRuntimes(): Promise<
       ],
       "osx": [
         runtimeDir.join('bin/igor/osx/arm64/Igor'),
-        runtimeDir.join('bin/igor/osx/x64/Igor'),
-        runtimeDir.join('mac/dmg_app.sh'),
+        runtimeDir.join('bin/igor/osx/x64/Igor')
       ],
       "linux": []
     };
