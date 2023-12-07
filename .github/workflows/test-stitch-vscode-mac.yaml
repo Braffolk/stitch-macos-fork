@@ -30,11 +30,10 @@ jobs:
         with:
           version: 8
           run_install: false
-      - run: pnpm config set pnpm-prefix ~/.pnpm-global
-
-      - name: Get pnpm store directory
-        shell: bash
+      
+      - name: pnpm config
         run: |
+          pnpm config set pnpm-prefix ~/.pnpm-global
           echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
       # Remove any existing pnpm-lock.yaml files, which are
@@ -52,11 +51,13 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
 
+
+
       # Env vars
       - name: Set Environment Variables
         run: |
           echo "APPDATA=$HOME/.config" >> $GITHUB_ENV
-          echo "PROGRAMFILES=$HOME/Applications" >> $GITHUB_ENV
+          echo "PROGRAMFILES=/Applications" >> $GITHUB_ENV
           echo "PROGRAMDATA=/Users/Shared/" >> $GITHUB_ENV
 
       - name: Make dirs if they don't exist
@@ -69,9 +70,9 @@ jobs:
       - name: Install GMS
         run: |
           curl -L https://gms.yoyogames.com/GameMakerStudio2-2022.300.0.488.pkg -o gms.pkg
-          sudo installer -pkg gms.pkg -target $PROGRAMFILES -verbose
+          sudo installer -pkg gms.pkg -target /Applications -verbose
           # Open GMS
-          open -a "$PROGRAMFILES/GameMaker Beta"
+          open -a "/Applications/GameMaker Beta"
       
       - name: Wait for runtime
         run: |
