@@ -39,3 +39,7 @@ jobs:
       - name: Test
         continue-on-error: false
         run: pnpm turbo run test --only --filter=bscotch-stitch-vscode...
+        env:
+          APPDATA: /Users/$USER/.config
+          PROGRAMDATA: /Users/Shared/
+          PROGRAMFILES: /Users/$USER/Applications
