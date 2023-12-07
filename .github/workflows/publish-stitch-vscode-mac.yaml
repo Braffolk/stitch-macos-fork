@@ -75,7 +75,7 @@ jobs:
 
       - run: pwd
       - name: Create VSCodePackage
-        run: ./node_modules/.bin/vsce package --no-dependencies --githubBranch develop --out bscotch-stitch-vscode-mac.vsix
+        run: vsce package --no-dependencies --githubBranch develop --out bscotch-stitch-vscode-mac.vsix
         env:
           APPDATA: $HOME/.config
           PROGRAMDATA: /Users/Shared/
