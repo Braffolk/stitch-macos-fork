@@ -311,10 +311,15 @@ export class GameMakerIde extends GameMakerComponent {
           'Applications',
         );
         const systemApplications = new Pathy('/Applications');
-        console.log("listDirectlyInstalled", userApplications.absolute, systemApplications.absolute)
+        const stitchCache = GameMakerIde.defaultCachedIdeParentDirectory;
+        console.log("listDirectlyInstalled",
+          userApplications.absolute,
+          systemApplications.absolute,
+          stitchCache.absolute);
         return [
           ...(await GameMakerIde.listInstalledInDir(userApplications)),
-          ...(await GameMakerIde.listInstalledInDir(systemApplications))
+          ...(await GameMakerIde.listInstalledInDir(systemApplications)),
+          ...(await GameMakerIde.listInstalledInDir(stitchCache)),
         ];
       } else {
         const applications = new Pathy(programFiles);
