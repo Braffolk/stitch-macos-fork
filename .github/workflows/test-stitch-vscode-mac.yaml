@@ -83,7 +83,13 @@ jobs:
       
       # Debug - list files in /Users/$USER/Applications
       - name: List files in /Users/$USER/Applications
-        run: ls -la /Users/$USER/Applications
+        run: |
+          if [ -d "/Users/$USER/Applications" ]; then
+            ls -la /Users/$USER/Applications
+          else
+            echo "Directory /Users/$USER/Applications does not exist."
+          fi
+          
 
       # Install GMS runtime
       - name: Install runtime
