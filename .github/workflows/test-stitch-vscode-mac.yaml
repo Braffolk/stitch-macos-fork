@@ -94,7 +94,7 @@ jobs:
       # Install GMS runtime
       - name: Install runtime
         run: |
-          PATH_RUNTIME = "${PROGRAMDATA}GameMakerStudio2-Beta/Cache/runtimes/runtime-2022.300.0.478"
+          PATH_RUNTIME="${PROGRAMDATA}GameMakerStudio2-Beta/Cache/runtimes/runtime-2022.300.0.478"
           mkdir -p "$PATH_RUNTIME/download"
 
           # General
