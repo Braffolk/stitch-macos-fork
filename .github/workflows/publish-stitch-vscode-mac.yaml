@@ -80,18 +80,11 @@ jobs:
           PROGRAMDATA: /Users/Shared/
           PROGRAMFILES: $HOME/Applications
 
-      # Publish created package as a github release
-      - name: Create Release
-        uses: actions/create-release@v1
+      - uses: ncipollo/release-action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref }}
-          release_name: ${{ github.ref }}
-          draft: false
-          prerelease: false
-          artifacts: ./packages/vscode/bscotch-stitch-vscode-mac.vsix
-
+          artifacts: "./packages/vscode/bscotch-stitch-vscode-mac.vsix"
           body: |
             This is an auto-generated release for ${{ github.ref }}.
             It contains the latest version of the MacOS Stitch for VSCode extension.
