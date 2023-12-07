@@ -39,7 +39,7 @@ export class StitchLocationsProvider {
   async promptForGameMakerLocation() {
     const channel = await this.promptForGameMakerReleaseChannel();
     if (!channel) return;
-    // /^GameMaker(Studio2?)?(-(Beta|LTS))?\.exe$/
+    // /^GameMaker ?(Studio ?2?)?(-(Beta|LTS))?\.exe$/
     const uniquePaths = new Set<string>();
     const paths = (
       await showProgress(
@@ -50,8 +50,8 @@ export class StitchLocationsProvider {
       if (uniquePaths.has(p.path)) return false;
       uniquePaths.add(p.path);
       if (p.path.endsWith('.exe')) return false;
-      const isLts = p.path.match(/GameMaker(Studio2?)?-LTS/);
-      const isBeta = p.path.match(/GameMaker(Studio2?)?-Beta/);
+      const isLts = p.path.match(/GameMaker ?(Studio ?2?)?-LTS/);
+      const isBeta = p.path.match(/GameMaker ?(Studio ?2?)?-Beta/);
       if (channel === 'lts' && isLts) return true;
       if (['unstable', 'beta'].includes(channel) && isBeta) return true;
       if (channel === 'stable' && !isLts && !isBeta) return true;

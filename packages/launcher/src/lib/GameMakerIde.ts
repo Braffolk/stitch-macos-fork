@@ -357,11 +357,17 @@ export class GameMakerIde extends GameMakerComponent {
         );
         // The main DLL file is binary, but it contains
         // plaintext version strings for the IDE version.
-
-        // On windows, last char is \b, on mac it is a letter
-        const version = (await dllFile.read<string>()).match(
-          /\b((23|2|20\d{2})\.\d{1,4}\.\d{1,4}\.\d{1,4})(\b|\w)/u,
+        const dllContent = await dllFile.read<string>();
+        const version = dllContent.match(
+          /\b((23|2|20\d{2})\.\d{1,4}\.\d{1,4}\.\d{1,4})/u,
         )?.[1];
+        if (!version) {
+          console.log(
+            `Content of ${dllFile.absolute}:\n\n${dllContent.substring(0, 256)}\n\n`,
+          );
+        } else {
+          console.log(`Found version ${version} in ${dllFile.absolute}`);
+        }
         ok(version, `Could not find a version string in ${dllFile.absolute}`);
         const matchingFeedVersion = releases.find(
           (v) => v.ide.version === version,
