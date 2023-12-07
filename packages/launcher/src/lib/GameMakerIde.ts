@@ -218,17 +218,23 @@ export class GameMakerIde extends GameMakerComponent {
         // Download & install!
         const installerPath = GameMakerIde.cachedIdeInstallerPath(version);
         await download(release.ide.link, installerPath);
-        // TODO - uncomment:
-        //await runIdeInstaller(installerPath);
+        await runIdeInstaller(installerPath);
         // Make sure this version is now installed
         directlyInstalled = await GameMakerIde.findDirectlyInstalled(
           version,
           options?.programFiles,
         );
-        ok(
-          directlyInstalled,
-          `Could not find version ${version} after installation. Installation might have gone to an unexpected location or the installer might have failed.`,
-        );
+        if (!directlyInstalled) {
+          const _installed = (await GameMakerIde.listDirectlyInstalled(options?.programFiles))
+            .map(v => v.version)
+          logger.debug(`Looked for in paths: `)
+          ok(
+            false,
+            `Could not find version ${version} after installation. Installation might have gone `
+            + `to an unexpected location or the installer might have failed.\n`
+            + `Installed versions: ${_installed.join(', ')}`
+          );
+        }
         await installerPath.delete();
       }
       // Copy over to Stitch

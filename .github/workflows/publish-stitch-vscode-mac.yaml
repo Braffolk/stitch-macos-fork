@@ -80,6 +80,11 @@ jobs:
           PROGRAMDATA: /Users/Shared/
           PROGRAMFILES: $HOME/Applications
 
+
+      - name: Generate tag
+        id: tag_generator
+        run: echo "::set-output name=tag::v$(date +'%Y%m%d%H%M%S')"
+
       - uses: ncipollo/release-action@v1
         with:
           artifacts: "./packages/vscode/bscotch-stitch-vscode-mac.vsix"
@@ -87,5 +92,5 @@ jobs:
             This is an auto-generated release for ${{ github.ref }}.
             It contains the latest version of the MacOS Stitch for VSCode extension.
           token: ${{ secrets.GITHUB_TOKEN }}
-          tag: stitch-vscode-mac
+          tag: ${{ steps.tag_generator.outputs.tag }}
           name: Stitch VSCode for MacOS  ${{ github.ref }}
