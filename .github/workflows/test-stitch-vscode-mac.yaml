@@ -70,6 +70,14 @@ jobs:
         run: |
           curl -L https://gms.yoyogames.com/GameMakerStudio2-2022.300.0.488.pkg -o gms.pkg
           sudo installer -pkg gms.pkg -target $PROGRAMFILES -verbose
+      
+      - name: Wait for runtime
+      # wait till the runtime is installed
+        run: |
+          while [ ! -f ${PROGRAMDATA}Users/Shared/GameMakerStudio2-Beta/Cache/runtimes/runtime-2022.300.0.478/bin/Igor.exe ]; do
+            echo "Waiting for Igor to appear..."
+            sleep 2
+          done
 
       # Debug - list files in /Applications
       - name: List files in /
