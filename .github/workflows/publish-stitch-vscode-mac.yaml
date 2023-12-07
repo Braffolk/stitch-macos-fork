@@ -58,7 +58,7 @@ jobs:
       - run: corepack enable
       # BUILD DEPS
       - name: Build everything
-        run: pnpm turbo run build --only --filter=bscotch-stitch-vscode...
+        run: pnpm turbo run build --only --filter=bscotch-stitch-vscode... --filter=stitch-monorepo
       - run: pwd
 
 
@@ -73,7 +73,7 @@ jobs:
 
       - run: pwd
       - name: Create VSCodePackage
-        run: vsce package --no-dependencies --githubBranch develop --out bscotch-stitch-vscode-mac.vsix
+        run: pnpm vsce package --no-dependencies --githubBranch develop --out bscotch-stitch-vscode-mac.vsix
         env:
           APPDATA: $HOME/.config
           PROGRAMDATA: /Users/Shared/
