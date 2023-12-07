@@ -98,19 +98,19 @@ jobs:
           mkdir -p "$PATH_RUNTIME/download"
 
           # General
-          curl -L b5bacc1c-45d8-4116-8583-12b6fbf3fac5.zip 
+          curl -L https://gm2016.yoyogames.com/b5bacc1c-45d8-4116-8583-12b6fbf3fac5.zip 
           mv b5bacc1c-45d8-4116-8583-12b6fbf3fac5.zip "$PATH_RUNTIME/download"
 
           # Mac
-          curl -L 93106ab6-4cb8-4c1a-bb8f-74851ba0cf6f.zip
+          curl -L https://gm2016.yoyogames.com/93106ab6-4cb8-4c1a-bb8f-74851ba0cf6f.zip
           mv 93106ab6-4cb8-4c1a-bb8f-74851ba0cf6f.zip "$PATH_RUNTIME/download"
 
           # Mac YYC
-          curl -L 61d122b9-0176-4056-9cc4-8d412cc2429d.zip
+          curl -L https://gm2016.yoyogames.com/61d122b9-0176-4056-9cc4-8d412cc2429d.zip
           mv 61d122b9-0176-4056-9cc4-8d412cc2429d.zip "$PATH_RUNTIME/download"
 
           # Windows
-          curl -L 9a3cbb36-96ee-48af-851b-8d77737a7a0b.zip
+          curl -L https://gm2016.yoyogames.com/9a3cbb36-96ee-48af-851b-8d77737a7a0b.zip
           mv 9a3cbb36-96ee-48af-851b-8d77737a7a0b.zip "$PATH_RUNTIME/download"
 
 
