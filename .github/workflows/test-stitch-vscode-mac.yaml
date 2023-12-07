@@ -82,11 +82,17 @@ jobs:
           attempts=0
           max_attempts=30
           while [ ! -f "${PROGRAMDATA}GameMakerStudio2-Beta/Cache/runtimes/runtime-2022.300.0.478/bin/Igor.exe" ]; do
-            echo "Waiting for Igor to appear..."
+            echo "Waiting for Igor to appear... ($attempts/$max_attempts)"
             sleep 4
             ((attempts++))
             if [ $attempts -eq $max_attempts ]; then
               echo "Timeout waiting for Igor"
+              echo "Cache/runtimes tree:"
+              ls -la "${PROGRAMDATA}GameMakerStudio2-Beta/Cache/runtimes"
+
+              echo "runtime-2022.300.0.478 tree:"
+              ls -la "${PROGRAMDATA}GameMakerStudio2-Beta/Cache/runtimes/runtime-2022.300.0.478"
+
               exit 1
             fi
           done
