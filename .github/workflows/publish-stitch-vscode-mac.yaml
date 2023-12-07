@@ -52,8 +52,13 @@ jobs:
       
 
       #- run: curl https://sh.rustup.rs -sSf | sh -s -- -y
+
+
+
       - run: corepack enable
-      - run: pnpm install --filter=bscotch-stitch-vscode...
+      # BUILD DEPS
+      - name: Build everything
+        run: pnpm turbo run build --only --filter=bscotch-stitch-vscode...
       - run: pwd
 
 
