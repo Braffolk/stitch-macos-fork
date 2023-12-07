@@ -114,7 +114,6 @@ jobs:
           curl -L https://gm2016.yoyogames.com/9a3cbb36-96ee-48af-851b-8d77737a7a0b.zip \
             -o "$PATH_RUNTIME/download/9a3cbb36-96ee-48af-851b-8d77737a7a0b.zip"
 
-
           open -a "/Applications/GameMaker Studio 2 Beta.app"
 
 
@@ -128,7 +127,7 @@ jobs:
           fi
 
           attempts=0
-          max_attempts=30
+          max_attempts=120
           while [ ! -f "${PROGRAMDATA}GameMakerStudio2-Beta/Cache/runtimes/runtime-2022.300.0.478/bin/Igor.exe" ]; do
             echo "Waiting for Igor to appear... ($attempts/$max_attempts)"
             sleep 4
