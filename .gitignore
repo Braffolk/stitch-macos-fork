@@ -81,3 +81,6 @@ packages/releases/releases-summary-mac.json
 packages/releases/releases-summary-win.json
 packages/sprite-source/samples/.stitch/sprites.info.json
 packages/sprite-source/samples/.stitch/sprites.source.json
+
+*.compiler.txt
+*.runner.txt
