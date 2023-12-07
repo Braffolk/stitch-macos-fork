@@ -78,6 +78,10 @@ jobs:
       - name: test
         # Site and gcdata are not in the scope of this workflow
         run: pnpm turbo run test:auto --filter=\!@bscotch/gcdata... --filter=\!@bscotch/stitch-site... -- --continue=true -p --exit -y
+        env:
+          APPDATA: ${{ env.APPDATA }}
+          PROGRAMFILES: ${{ env.PROGRAMFILES }}
+          PROGRAMDATA: ${{ env.PROGRAMDATA }}
 
       # Report
       - name: Test Report
