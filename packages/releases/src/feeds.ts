@@ -17,7 +17,7 @@ import { ideFeedUrls, runtimeFeedUrls } from './urls.js';
 
 
 export async function computeReleasesSummaryWithNotes(
-  os: 'win' | 'mac' | 'linux',
+    os: 'win' | 'mac' | 'linux',
 	releases?: GameMakerRelease[],
 	cache: Pathy | string = defaultNotesCachePath
 ): Promise<GameMakerReleaseWithNotes[]> {
