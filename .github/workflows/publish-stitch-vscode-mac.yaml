@@ -57,7 +57,7 @@ jobs:
 
 
       # BUILD DEPS
-      - name: Build everything
+      - name: Build deps
         run: pnpm turbo run build --only --filter=bscotch-stitch-vscode...
       - run: pwd
 
@@ -75,6 +75,7 @@ jobs:
 
       - run: pwd
       - name: Create VSCodePackage
+        working-directory: packages/vscode
         run: vsce package --no-dependencies --githubBranch develop --out bscotch-stitch-vscode-mac.vsix
         env:
           APPDATA: $HOME/.config
@@ -91,7 +92,7 @@ jobs:
           release_name: ${{ github.ref }}
           draft: false
           prerelease: false
-          artifacts: bscotch-stitch-*.vsix
+          artifacts: packages/vscode/bscotch-stitch-vscode-mac.vsix
 
           body: |
             This is an auto-generated release for ${{ github.ref }}.
