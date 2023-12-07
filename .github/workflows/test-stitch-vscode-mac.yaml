@@ -71,7 +71,7 @@ jobs:
           curl -L https://gms.yoyogames.com/GameMakerStudio2-2022.300.0.488.pkg -o gms.pkg
           sudo installer -pkg gms.pkg -target $PROGRAMFILES -verbose
           # Open GMS
-          open -a $PROGRAMFILES/GameMaker Beta
+          open -a "$PROGRAMFILES/GameMaker Beta"
       
       - name: Wait for runtime
         run: |
