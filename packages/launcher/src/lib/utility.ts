@@ -257,7 +257,7 @@ export async function listInstalledRuntimes(): Promise<
     };
     let executablePaths = executablePathsPerOS[currentOs ?? 'windows'];
 
-    
+
     let executablePath: Pathy | undefined;
     for (const path of executablePaths) {
       if (await path.exists()) {
@@ -275,6 +275,9 @@ export async function listInstalledRuntimes(): Promise<
     });
   }
   console.log("installed runtimes", runtimes.map(r => r.version));
+  if (runtimes.length === 0) {
+    console.log("   Looked for runtimes in directories", runtimeDirs.map(d => d.absolute));
+  }
   return runtimes;
 }
 
