@@ -17,14 +17,15 @@ process.env for MacOS:
 
 ## Progress
 
+<img width="460" alt="image" src="https://github.com/Braffolk/stitch-macos-fork/assets/7544836/9fbfc34b-011a-4b68-b235-645418c2d2fa">
+
+
 VSCode extension mostly works now. Managing runtimes and IDEs and
 running projects also works. Downloading new IDE's is a bit flaky,
 although all tests pass.
 
 #### Releases package
 Supports MacOS and Linux.
-
-Tests passing: 5/5
 
 - Downloading and reading release feeds is now OS specific. The package does not know the OS, the OS is passed into params
 - Added tests for downloading Linux and MacOS releases
@@ -34,8 +35,6 @@ Tests passing: 5/5
 
 Supports MacOS.
 
-Tests passing: 11/11
-
 The following features work on a Mac with MacOS IDEs/runtimes:
 
 - Can download Runtimes and IDE files on MacOS
@@ -44,10 +43,10 @@ The following features work on a Mac with MacOS IDEs/runtimes:
 - Properly caches downloaded IDE versions
 - Can run projects with a runtime (Igor commands work)
 - Can open projects with a given runtime
+- Mono runtimes are also supported now. Meaning older runtimes work!
 
 Issues:
 
-- older runtimes do not have an easily distinguishable (some point in 2022) way of launching Igor. So they are not supported as of now
 - There are no separate release notes for MacOS. The RSS feeds link to the Windows release notes.
     This causes an issue when there is an IDE version that is only available for MacOS. In such
     a case, there will be a link to the release notes, but requesting it will give AccessDenied.
@@ -57,21 +56,15 @@ Issues:
 
 Supports MacOS.
 
-Tests passing: 54 passing, 7 pending
-
 - GameMakerEngine does not fallback to windows. It attempts to derive the used platform
 
 ### Pixel Checksum
 
 Supports MacOS
 
-Tests passing: 2/2
-
 ### Spritely package
 
 Supports MacOS
-
-Tests passing: 23/23
 
 - All tests run when the canvas library is used
 
@@ -85,10 +78,6 @@ Works on MacOS
 
 ## Potential problems
 Since I don't work with Node daily, I might have missed some things. Here are some potential problems:
-
-- Detecting OS uses os.type(). This, according to docs, in prod tells what platform the binary was compiled for. 
-    Not sure if this will work with the build process of Stitch.
-
 
 ## CLI
 
