@@ -88,7 +88,7 @@ jobs:
       # Install GMS runtime
       - name: Install runtime
         run: |
-          open -a "/GameMaker Beta.app"
+          open -a "/Applications/GameMaker Studio 2 Beta.app"
 
       # Wait for GMS runtime
       - name: Wait for runtime
