@@ -331,7 +331,7 @@ export class GameMakerIde extends GameMakerComponent {
     const ideVersions: (GameMakerIde | undefined)[] = await Promise.all(
       ideExecutables.map(async (executablePath) => {
         const possibleFileNames =
-          /^(IDE|GameMaker(Studio2?)?(-(Beta|LTS))?)\.dll|Info\.plist$/;
+          /^(IDE|GameMaker ?(Studio ?2?)?(-(Beta|LTS))?)\.dll|Info\.plist$/;
         let parentDir = executablePath;
         if (executablePath.basename.endsWith('.exe')) {
           parentDir = parentDir.up();
@@ -357,8 +357,10 @@ export class GameMakerIde extends GameMakerComponent {
         );
         // The main DLL file is binary, but it contains
         // plaintext version strings for the IDE version.
+
+        // On windows, last char is \b, on mac it is a letter
         const version = (await dllFile.read<string>()).match(
-          /\b((23|2|20\d{2})\.\d{1,4}\.\d{1,4}\.\d{1,4})\b/u,
+          /\b((23|2|20\d{2})\.\d{1,4}\.\d{1,4}\.\d{1,4})(\b|\w)/u,
         )?.[1];
         ok(version, `Could not find a version string in ${dllFile.absolute}`);
         const matchingFeedVersion = releases.find(
