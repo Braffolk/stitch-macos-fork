@@ -1,4 +1,4 @@
-name: Stitch for VSCode
+name: Publish Stitch for VSCode
 
 on:
   workflow_dispatch:
