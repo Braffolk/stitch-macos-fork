@@ -72,3 +72,12 @@ Thumbs.db
 !.env.vault
 .flaskenv*
 packages/vscode/.npmrc
+test-results.json
+packages/releases/release-notes-cache-linux.json
+packages/releases/release-notes-cache-mac.json
+packages/releases/release-notes-cache-win.json
+packages/releases/releases-summary-linux.json
+packages/releases/releases-summary-mac.json
+packages/releases/releases-summary-win.json
+packages/sprite-source/samples/.stitch/sprites.info.json
+packages/sprite-source/samples/.stitch/sprites.source.json
