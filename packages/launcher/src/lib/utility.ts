@@ -257,7 +257,7 @@ export async function listInstalledRuntimes(): Promise<
     };
     let executablePaths = executablePathsPerOS[currentOs ?? 'windows'];
 
-
+    
     let executablePath: Pathy | undefined;
     for (const path of executablePaths) {
       if (await path.exists()) {
@@ -274,6 +274,7 @@ export async function listInstalledRuntimes(): Promise<
       executablePath,
     });
   }
+  console.log("installed runtimes", runtimes.map(r => r.version));
   return runtimes;
 }
 
@@ -393,7 +394,7 @@ export async function listInstalledIdes(
       const userApplicationsChildren = await userApplications.listChildrenRecursively(options);
       const systemApplicationsChildren = await systemApplications.listChildrenRecursively(options);
       const installed = [...userApplicationsChildren, ...systemApplicationsChildren];
-      console.log('installed', installed.map(p => p.absolute));
+      console.log('installed ides', installed.map(p => p.absolute));
       return installed;
     } else {
       return await new Pathy(parentDir).listChildrenRecursively(options);
