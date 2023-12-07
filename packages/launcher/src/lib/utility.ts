@@ -388,7 +388,9 @@ export async function listInstalledIdes(
     console.log('systemApplications path', systemApplications.absolute);
     const userApplicationsChildren = await userApplications.listChildrenRecursively(options);
     const systemApplicationsChildren = await systemApplications.listChildrenRecursively(options);
-    return [...userApplicationsChildren, ...systemApplicationsChildren];
+    const installed = [...userApplicationsChildren, ...systemApplicationsChildren];
+    console.log('installed', installed.map(p => p.absolute));
+    return installed;
   }
 
   assert(parentDir, 'No program files directory provided');
