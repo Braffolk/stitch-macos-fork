@@ -16,8 +16,6 @@ defaults:
 jobs:
   publish:
     runs-on: macos-latest
-    permissions:
-      contents: write
     steps:
       # SETUP
       - uses: actions/checkout@v3
@@ -41,7 +39,7 @@ jobs:
 
       # TEST
       - name: Test
-        run: pnpm turbo run test:dev --only --filter=bscotch-stitch-vscode...
+        run: pnpm turbo run test --only --filter=bscotch-stitch-vscode...
 
       # Leave a comment
       - name: Create commit comment
