@@ -204,6 +204,9 @@ export async function runIdeInstaller(idePath: Pathy) {
   }
   debug(`Running command: ${command}`);
   const installer = exec(command);
+  installer.stdout?.on('data', (data) => {
+    console.log('CLI: ', data.toString().split('\n').join('     \n').trimStart());
+  });
   return await new Promise((resolve, reject) => {
     installer.on('error', reject);
     installer.on('exit', resolve);
