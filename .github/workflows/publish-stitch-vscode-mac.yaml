@@ -18,12 +18,13 @@ jobs:
     runs-on: macos-latest
     steps:
       # SETUP
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           lfs: true
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
           node-version: 18.18.0
+          cache: 'pnpm'
 
       # Remove any existing pnpm-lock.yaml files, which are
       # both platform-specific and will likely halt the build.
@@ -31,23 +32,19 @@ jobs:
         run: find $(pwd) -name pnpm-lock.yaml -delete
 
       #- run: curl https://sh.rustup.rs -sSf | sh -s -- -y
-      - run: |
-          corepack enable && \
-          pnpm install --filter=bscotch-stitch-vscode... --filter=stitch-monorepo
+      - run: corepack enable
+      - run: pnpm install --filter=bscotch-stitch-vscode...
       - run: pwd
 
 
 
-      # BUILD DEPS
-      - name: Build deps
-        run: pnpm turbo run build --only --filter=bscotch-stitch-vscode...
-
       - name: Build VSCode
         run: |
           cd packages/vscode && \
-          pnpm install . && \
-          pnpm build && \
-          pnpm install @vscode/vsce
+          pnpm build
+
+      - name: Install VSCE
+        run: pnpm install @vscode/vsce
 
       - run: pwd
       - name: Create VSCodePackage
