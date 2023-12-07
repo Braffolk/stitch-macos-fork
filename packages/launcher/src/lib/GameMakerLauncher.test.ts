@@ -17,11 +17,11 @@ const promptWithTimeout = function(
 ): Promise<Object> {
   return Promise.race([
     inquirer.prompt(promptOptions),
-    new Promise((resolve) => setTimeout(() => resolve({ hasCorrectVersions: false }), timeout))
+    new Promise((resolve) => setTimeout(() => resolve({  }), timeout))
   ]) as Promise<Object>;
 };
 
-xdescribe('GameMakerLauncher', function () {
+describe('GameMakerLauncher', function () {
   it('can list known filepaths', async function () {
     const paths = await GameMakerComponent.listWellKnownPaths();
 
@@ -143,9 +143,13 @@ xdescribe('GameMakerLauncher', function () {
         message: `Is the IDE version ${sampleProjectCompatibleIde} and the Runtime version ${opener.runtimeVersion}?`,
         name: 'hasCorrectVersions',
       },
-    ]) as { hasCorrectVersions: boolean };
-    expect(hasCorrectVersions, 'Opened IDE should have used correct versions')
-      .to.be.true;
+    ]) as { hasCorrectVersions?: boolean };
+    if (hasCorrectVersions === undefined) {
+      this.skip();
+    } else {
+      expect(hasCorrectVersions, 'Opened IDE should have used correct versions')
+        .to.be.true;
+    }
     opener.close();
   });
 
@@ -166,9 +170,13 @@ xdescribe('GameMakerLauncher', function () {
         message: `Is the IDE version ${sampleProjectCompatibleIde} and the Runtime version ${sampleProjectCompatibleRuntime}?`,
         name: 'hasCorrectVersions',
       },
-    ]) as { hasCorrectVersions: boolean };
-    expect(hasCorrectVersions, 'Opened IDE should have used correct versions')
-      .to.be.true;
+    ]) as { hasCorrectVersions?: boolean };
+    if (hasCorrectVersions === undefined) {
+      this.skip();
+    } else {
+      expect(hasCorrectVersions, 'Opened IDE should have used correct versions')
+        .to.be.true;
+    }
     opener.close();
   });
 });
