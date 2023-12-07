@@ -52,6 +52,12 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
 
+      # Install GMS
+      - name: Install GMS
+        run: |
+          curl -L https://gms.yoyogames.com/GameMakerStudio2-2022.300.0.488.pkg -o gms.pkg
+          sudo installer -pkg gms.pkg -target $HOME/Applications
+
       # Env vars
       - name: Set Environment Variables
         run: |
