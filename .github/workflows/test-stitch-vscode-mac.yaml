@@ -73,9 +73,15 @@ jobs:
       
       - name: Wait for runtime
         run: |
+          sleep 5
+          if [ ! -d "${PROGRAMDATA}GameMakerStudio2-Beta" ]; then
+            echo "Directory ${PROGRAMDATA}GameMakerStudio2-Beta does not exist."
+            exit 1
+          fi
+
           attempts=0
           max_attempts=30
-          while [ ! -f ${PROGRAMDATA}GameMakerStudio2-Beta/Cache/runtimes/runtime-2022.300.0.478/bin/Igor.exe ]; do
+          while [ ! -f "${PROGRAMDATA}GameMakerStudio2-Beta/Cache/runtimes/runtime-2022.300.0.478/bin/Igor.exe" ]; do
             echo "Waiting for Igor to appear..."
             sleep 4
             ((attempts++))
