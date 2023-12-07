@@ -38,7 +38,7 @@ jobs:
       # TEST
       - name: Test
         continue-on-error: true
-        run: pnpm turbo run test --only --filter=bscotch-stitch-vscode...
+        run: pnpm turbo run "mocha --forbid-only=false --timeout=9999999 --reporter json > test-results.json" --only --filter=bscotch-stitch-vscode...
 
 
       - name: Test Report
