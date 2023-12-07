@@ -71,8 +71,6 @@ jobs:
       - name: Install VSCE
         run: pnpm install @vscode/vsce --global
 
-      - run: sed -i '' 's/@local\///' package.json
-
       - run: pwd
       - name: Create VSCodePackage
         working-directory: ./packages/vscode
