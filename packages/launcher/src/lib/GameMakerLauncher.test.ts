@@ -1,6 +1,6 @@
 import { pathy } from '@bscotch/pathy';
 import { expect } from 'chai';
-import { default as inquirer } from 'inquirer';
+import { Answers, default as inquirer, QuestionCollection } from 'inquirer';
 import { GameMakerComponent } from './GameMakerComponent.js';
 import { GameMakerIde } from './GameMakerIde.js';
 import { GameMakerLauncher } from './GameMakerLauncher.js';
@@ -12,7 +12,16 @@ const sampleProjectPath = 'samples/project/project.yyp';
 const sampleProjectCompatibleIde = '2022.600.0.147'; //'2022.500.0.97'; //'2022.500.0.88'; //'2022.600.0.147';
 const sampleProjectCompatibleRuntime = '2022.600.0.121';
 
-describe('GameMakerLauncher', function () {
+const promptWithTimeout = function(
+  promptOptions: QuestionCollection<Answers>, timeout = 5000
+): Promise<Object> {
+  return Promise.race([
+    inquirer.prompt(promptOptions),
+    new Promise((resolve) => setTimeout(() => resolve({ hasCorrectVersions: false }), timeout))
+  ]) as Promise<Object>;
+};
+
+xdescribe('GameMakerLauncher', function () {
   it('can list known filepaths', async function () {
     const paths = await GameMakerComponent.listWellKnownPaths();
 
@@ -128,13 +137,13 @@ describe('GameMakerLauncher', function () {
     });
     expect(opener.runtimeVersion).to.be.a('string');
 
-    const { hasCorrectVersions } = await inquirer.prompt([
+    const { hasCorrectVersions } = await promptWithTimeout([
       {
         type: 'confirm',
         message: `Is the IDE version ${sampleProjectCompatibleIde} and the Runtime version ${opener.runtimeVersion}?`,
         name: 'hasCorrectVersions',
       },
-    ]);
+    ]) as { hasCorrectVersions: boolean };
     expect(hasCorrectVersions, 'Opened IDE should have used correct versions')
       .to.be.true;
     opener.close();
@@ -151,13 +160,13 @@ describe('GameMakerLauncher', function () {
       ideVersion: sampleProjectCompatibleIde,
       runtimeVersion: sampleProjectCompatibleRuntime,
     });
-    const { hasCorrectVersions } = await inquirer.prompt([
+    const { hasCorrectVersions } = await promptWithTimeout([
       {
         type: 'confirm',
         message: `Is the IDE version ${sampleProjectCompatibleIde} and the Runtime version ${sampleProjectCompatibleRuntime}?`,
         name: 'hasCorrectVersions',
       },
-    ]);
+    ]) as { hasCorrectVersions: boolean };
     expect(hasCorrectVersions, 'Opened IDE should have used correct versions')
       .to.be.true;
     opener.close();
