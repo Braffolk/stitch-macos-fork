@@ -66,13 +66,6 @@ jobs:
           mkdir -p $PROGRAMFILES
           mkdir -p $PROGRAMDATA
 
-      # Debug - list files in /Applications
-      - name: List files in /
-        run: ls -la /
-      
-      # Debug - list files in $PROGRAMFILES
-      - name: List files in $PROGRAMFILES
-        run: ls -la $PROGRAMFILES
 
       # Install GMS
       - name: Install GMS
@@ -80,8 +73,21 @@ jobs:
           curl -L https://gms.yoyogames.com/GameMakerStudio2-2022.300.0.488.pkg -o gms.pkg
           sudo installer -pkg gms.pkg -target /Applications -verbose
           # Open GMS
-          open -a "/Applications/GameMaker Beta"
+          open -a "/Applications/GameMaker Beta.app"
       
+      # Debug - list files in /Applications
+      - name: List files in /
+        run: ls -la /
+      
+      # Debug - list files in $PROGRAMFILES
+      - name: List files in /Applications/
+        run: ls -la /Applications/
+      
+      # Debug - list files in /Users/$USER/Applications
+      - name: List files in /Users/$USER/Applications
+        run: ls -la /Users/$USER/Applications
+
+      # Wait for GMS runtime
       - name: Wait for runtime
         run: |
           sleep 5
