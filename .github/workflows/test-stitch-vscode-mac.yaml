@@ -17,7 +17,7 @@ jobs:
   test-mac:
     runs-on: macos-latest
     steps:
-      # SETUP
+      # Setup
       - uses: actions/checkout@v3
         with:
           lfs: true
@@ -64,16 +64,16 @@ jobs:
           mkdir -p $HOME/Applications
           mkdir -p /Users/Shared/
 
-      # Install deps
+      # Install dependencies
       - run: corepack enable
       - run: pnpm install --filter=bscotch-stitch-vscode...
       - run: pwd
 
-      # BUILD DEPS
+      # Build depdenencies
       - name: Build
         run: pnpm turbo run build --only --filter=bscotch-stitch-vscode...
 
-      # TEST
+      # Run full tests
       - name: Test
         #continue-on-error: true
         run: pnpm turbo run test:auto -- --continue=true
@@ -84,5 +84,5 @@ jobs:
         if: success() || failure()    # run this step even if previous step failed
         with:
           name: Mocha tests            # Name of the check run which will be created
-          path: packages/**/test-results.json    # Path to test results
+          path: packages/*/test-results.json    # Path to test results
           reporter: mocha-json
