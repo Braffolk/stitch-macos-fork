@@ -312,7 +312,7 @@ export class GameMakerIde extends GameMakerComponent {
         );
         const systemApplications = new Pathy('/Applications');
         const paths = [userApplications, systemApplications]
-            .filter(p => p.exists())
+            .filter(p => p.existsSync())
             .flatMap(p => GameMakerIde.listInstalledInDir(p));
         return Promise.all(paths).then(v => v.flat());
       } else {
