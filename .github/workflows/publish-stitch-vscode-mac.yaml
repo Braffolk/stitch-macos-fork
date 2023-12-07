@@ -40,10 +40,10 @@ jobs:
 
 
       - run: cd packages/vscode
-      - run: npm install @vscode/vsce
+      - run: npm install --global @vscode/vsce
 
       - name: CreateVSCodePackage
-        run: vsce package --no-dependencies --githubBranch develop
+        run: npm vsce package --no-dependencies --githubBranch develop
         env:
           APPDATA: $HOME/.config
           PROGRAMDATA: /Users/Shared/
