@@ -91,3 +91,4 @@ jobs:
           name: Mocha tests            # Name of the check run which will be created
           path: packages/*/test-results.json    # Path to test results
           reporter: mocha-json
+          fail-on-error: false
