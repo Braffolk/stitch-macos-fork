@@ -43,7 +43,7 @@ jobs:
       - run: npm install --global @vscode/vsce
 
       - name: CreateVSCodePackage
-        run: npm vsce package --no-dependencies --githubBranch develop
+        run: vsce package --no-dependencies --githubBranch develop --out bscotch-stitch-vscode-mac.vsix
         env:
           APPDATA: $HOME/.config
           PROGRAMDATA: /Users/Shared/
