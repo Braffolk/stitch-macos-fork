@@ -49,5 +49,14 @@ jobs:
 
       # TEST
       - name: Test
-        continue-on-error: false
-        run: pnpm turbo run test --only --filter=bscotch-stitch-vscode... -- --forbid-only=false
+        #continue-on-error: true
+        run: pnpm turbo run test:auto -- --continue=true
+      
+      # Report
+      - name: Test Report
+        uses: dorny/test-reporter@v1
+        if: success() || failure()    # run this step even if previous step failed
+        with:
+          name: Mocha tests            # Name of the check run which will be created
+          path: packages/**/test-results.json    # Path to test results
+          reporter: mocha-json

@@ -28,6 +28,10 @@
 			"dependsOn": ["build"],
 			"outputs": []
 		},
+		"test:auto": {
+			"dependsOn": ["build"],
+			"outputs": []
+		},
 		"build:dev": {
 			"dependsOn": ["^build", "^build:dev"],
 			"outputs": []

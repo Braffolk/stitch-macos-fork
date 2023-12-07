@@ -79,11 +79,13 @@ export async function projectLogDirectory(
   project?: string | Pathy,
   options?: GameMakerLogOptions,
 ) {
-  const logDir = new Pathy(
+  const stripEmpath = (p?: string | Pathy) => p ? p.toString().replace(/^"|"$/g, '') : p;
+
+  const logDir = new Pathy(stripEmpath(
     options?.logDir ||
       (project && projectFolder(project).join('logs')) ||
       stitchConfigDir.join('logs'),
-  );
+  ));
   await logDir.ensureDirectory();
   return logDir;
 }
