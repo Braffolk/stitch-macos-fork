@@ -27,27 +27,29 @@ jobs:
       # both platform-specific and will likely halt the build.
       - run: find $(pwd) -name pnpm-lock.yaml -delete
 
-      - run: corepack enable
-      - run: pnpm install --filter=bscotch-stitch-vscode... --filter=stitch-monorepo
-      - run: pwd
-
-      # BUILD DEPS
-      - name: Build
-        run: pnpm turbo run build --only --filter=bscotch-stitch-vscode...
-
       - name: Set Environment Variables
         run: |
           echo "APPDATA=$HOME/.config" >> $GITHUB_ENV
           echo "PROGRAMFILES=$HOME/Applications" >> $GITHUB_ENV
           echo "PROGRAMDATA=/Users/Shared/" >> $GITHUB_ENV
 
-      - name: Make dirs if not exist
+      - name: Make dirs if they don't exist
         run: |
           mkdir -p $HOME/.config
           mkdir -p $HOME/Applications
           mkdir -p /Users/Shared/
 
+      - run: corepack enable
+      - run: pnpm install --filter=bscotch-stitch-vscode...
+      - run: pwd
+
+      # BUILD DEPS
+      - name: Build
+        run: pnpm turbo run build --only --filter=bscotch-stitch-vscode...
+
       # TEST
       - name: Test
         continue-on-error: false
-        run: pnpm turbo run test --only --filter=bscotch-stitch-vscode...
+        run: pnpm turbo run test --only --filter=bscotch-stitch-vscode... -- --forbid-only=false
+        env:
+          APPDATA: 
