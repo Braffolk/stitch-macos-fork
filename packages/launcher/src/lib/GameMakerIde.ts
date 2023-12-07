@@ -302,19 +302,27 @@ export class GameMakerIde extends GameMakerComponent {
    */
   @trace
   protected static async listDirectlyInstalled(
-    programFiles = process.env.PROGRAMFILES!,
+    programFiles?: string
   ) {
     if (process.platform === 'darwin') {
       // List both /Applications and ~/Applications
-      const userApplications = new Pathy(process.env.HOME || `/Users/${process.env.USER}/`).join(
-        'Applications',
-      );
-      const systemApplications = new Pathy('/Applications');
-      console.log("listDirectlyInstalled", userApplications, systemApplications)
-      return [
-        ...(await GameMakerIde.listInstalledInDir(userApplications)),
-        ...(await GameMakerIde.listInstalledInDir(systemApplications)),
-      ];
+      if (!programFiles) {
+        const userApplications = new Pathy(process.env.HOME || `/Users/${process.env.USER}/`).join(
+          'Applications',
+        );
+        const systemApplications = new Pathy('/Applications');
+        console.log("listDirectlyInstalled", userApplications.absolute, systemApplications.absolute)
+        return [
+          ...(await GameMakerIde.listInstalledInDir(userApplications)),
+          ...(await GameMakerIde.listInstalledInDir(systemApplications))
+        ];
+      } else {
+        const applications = new Pathy(programFiles);
+        return await GameMakerIde.listInstalledInDir(applications);
+      }
+    }
+    if (!programFiles) {
+      programFiles = process.env.PROGRAMFILES!;
     }
     return await GameMakerIde.listInstalledInDir(programFiles);
   }

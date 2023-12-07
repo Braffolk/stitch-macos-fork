@@ -373,7 +373,7 @@ const installedIdesOSOptions = {
 };
 
 export async function listInstalledIdes(
-  parentDir: string | Pathy = process.env.PROGRAMFILES!,
+  parentDir?: string | Pathy
 ) {
   assert (process.platform === 'win32' || process.platform === 'darwin', 'Only Windows and mac are supported');
 
@@ -382,15 +382,23 @@ export async function listInstalledIdes(
 
   // on macOS, look at both ~/Applications and /Applications
   if (process.platform === 'darwin') {
-    const userApplications = new Pathy(`${os.homedir()}/Applications`);
-    const systemApplications = new Pathy('/Applications');
-    console.log('userApplications path', userApplications.absolute);
-    console.log('systemApplications path', systemApplications.absolute);
-    const userApplicationsChildren = await userApplications.listChildrenRecursively(options);
-    const systemApplicationsChildren = await systemApplications.listChildrenRecursively(options);
-    const installed = [...userApplicationsChildren, ...systemApplicationsChildren];
-    console.log('installed', installed.map(p => p.absolute));
-    return installed;
+    if (!parentDir) {
+      const userApplications = new Pathy(`${os.homedir()}/Applications`);
+      const systemApplications = new Pathy('/Applications');
+      console.log('userApplications path', userApplications.absolute);
+      console.log('systemApplications path', systemApplications.absolute);
+      const userApplicationsChildren = await userApplications.listChildrenRecursively(options);
+      const systemApplicationsChildren = await systemApplications.listChildrenRecursively(options);
+      const installed = [...userApplicationsChildren, ...systemApplicationsChildren];
+      console.log('installed', installed.map(p => p.absolute));
+      return installed;
+    } else {
+      return await new Pathy(parentDir).listChildrenRecursively(options);
+    }
+  }
+
+  if (!parentDir) {
+    parentDir = new Pathy(process.env.PROGRAMFILES!);
   }
 
   assert(parentDir, 'No program files directory provided');
