@@ -26,6 +26,9 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 18.18.0
+
+      - run: rm -f pnpm-lock.yaml
+
       - run: corepack enable
       - run: pnpm install --filter=bscotch-stitch-vscode... --filter=stitch-monorepo
       - run: pwd
