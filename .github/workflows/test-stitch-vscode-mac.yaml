@@ -41,6 +41,12 @@ jobs:
           echo "PROGRAMFILES=$HOME/Applications" >> $GITHUB_ENV
           echo "PROGRAMDATA=/Users/Shared/" >> $GITHUB_ENV
 
+      - name: Make dirs if not exist
+        run: |
+          mkdir -p $HOME/.config
+          mkdir -p $HOME/Applications
+          mkdir -p /Users/Shared/
+
       # TEST
       - name: Test
         continue-on-error: false
