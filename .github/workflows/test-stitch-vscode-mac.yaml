@@ -71,9 +71,14 @@ jobs:
           curl -L https://gms.yoyogames.com/GameMakerStudio2-2022.300.0.488.pkg -o gms.pkg
           sudo installer -pkg gms.pkg -target $PROGRAMFILES -verbose
 
-      # Debug - list files in /
+      # Debug - list files in /Applications
       - name: List files in /
-        run: ls -la /
+        run: ls -la /Applications/
+      
+      # Debug - list files in $PROGRAMFILES
+      - name: List files in $PROGRAMFILES
+        run: ls -la $PROGRAMFILES
+
 
       # Install dependencies
       - run: corepack enable
