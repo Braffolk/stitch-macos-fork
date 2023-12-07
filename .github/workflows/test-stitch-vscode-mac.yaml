@@ -77,8 +77,8 @@ jobs:
       # Run full tests
       - name: test
         # Site and gcdata are not in the scope of this workflow
-        run: pnpm turbo run test:auto --filter=\!@bscotch/gcdata... --filter=\!@bscotch/stitch-site...  -- --continue=true --exit
-      
+        run: pnpm turbo run test:auto --filter=\!@bscotch/gcdata... --filter=\!@bscotch/stitch-site... -- --continue=true -p --exit -y
+
       # Report
       - name: Test Report
         uses: dorny/test-reporter@v1
