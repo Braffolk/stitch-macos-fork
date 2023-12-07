@@ -42,10 +42,11 @@ jobs:
         run: |
           cd packages/vscode && \
           pnpm install . && \
-          pnpm build
+          pnpm build && \
+          pnpm install vsce
 
       - name: CreateVSCodePackage
-        run: vsce package --no-dependencies --githubBranch develop --out bscotch-stitch-vscode-mac.vsix
+        run: pnpm vsce package --no-dependencies --githubBranch develop --out bscotch-stitch-vscode-mac.vsix
         env:
           APPDATA: $HOME/.config
           PROGRAMDATA: /Users/Shared/
