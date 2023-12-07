@@ -66,6 +66,14 @@ jobs:
           mkdir -p $PROGRAMFILES
           mkdir -p $PROGRAMDATA
 
+      # Debug - list files in /Applications
+      - name: List files in /
+        run: ls -la /
+      
+      # Debug - list files in $PROGRAMFILES
+      - name: List files in $PROGRAMFILES
+        run: ls -la $PROGRAMFILES
+
       # Install GMS
       - name: Install GMS
         run: |
@@ -99,14 +107,6 @@ jobs:
               exit 1
             fi
           done
-
-      # Debug - list files in /Applications
-      - name: List files in /
-        run: ls -la /Applications/
-      
-      # Debug - list files in $PROGRAMFILES
-      - name: List files in $PROGRAMFILES
-        run: ls -la $PROGRAMFILES
 
 
       # Install dependencies
