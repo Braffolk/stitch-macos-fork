@@ -56,7 +56,7 @@ jobs:
       - name: Set Environment Variables
         run: |
           echo "APPDATA=$HOME/.config" >> $GITHUB_ENV
-          echo "PROGRAMFILES=CurrentUserHomeDirectory" >> $GITHUB_ENV
+          echo "PROGRAMFILES=$HOME/Applications" >> $GITHUB_ENV
           echo "PROGRAMDATA=/Users/Shared/" >> $GITHUB_ENV
 
       - name: Make dirs if they don't exist
@@ -69,7 +69,7 @@ jobs:
       - name: Install GMS
         run: |
           curl -L https://gms.yoyogames.com/GameMakerStudio2-2022.300.0.488.pkg -o gms.pkg
-          sudo installer -pkg gms.pkg -target CurrentUserHomeDirectory
+          installer -pkg gms.pkg -target $PROGRAMFILES -y
 
       # Install dependencies
       - run: corepack enable
