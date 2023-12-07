@@ -56,9 +56,11 @@ jobs:
 
 
       - run: corepack enable
+      - run: pnpm install --filter=bscotch-stitch-vscode... --filter=stitch-monorepo
+
       # BUILD DEPS
       - name: Build everything
-        run: pnpm turbo run build --only --filter=bscotch-stitch-vscode... --filter=stitch-monorepo
+        run: pnpm turbo run build --only --filter=bscotch-stitch-vscode...
       - run: pwd
 
 
@@ -69,7 +71,7 @@ jobs:
           pnpm build
 
       - name: Install VSCE
-        run: pnpm install @vscode/vsce
+        run: pnpm install @vscode/vsce --global
 
       - run: pwd
       - name: Create VSCodePackage
