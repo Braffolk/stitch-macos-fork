@@ -49,6 +49,7 @@ jobs:
           pnpm build && \
           pnpm install @vscode/vsce
 
+      - run: pwd
       - name: Create VSCodePackage
         run: vsce package --no-dependencies --githubBranch develop --out bscotch-stitch-vscode-mac.vsix
         env:
