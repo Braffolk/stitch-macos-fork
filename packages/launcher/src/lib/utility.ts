@@ -375,12 +375,21 @@ const installedIdesOSOptions = {
 export async function listInstalledIdes(
   parentDir: string | Pathy = process.env.PROGRAMFILES!,
 ) {
-  assert(parentDir, 'No program files directory provided');
   assert (process.platform === 'win32' || process.platform === 'darwin', 'Only Windows and mac are supported');
 
   const options =
       installedIdesOSOptions[process.platform as 'win32' | 'darwin'] as PathyListChildrenOptions;
 
+  // on macOS, look at both ~/Applications and /Applications
+  if (process.platform === 'darwin') {
+    const userApplications = new Pathy(`${os.homedir()}/Applications`);
+    const systemApplications = new Pathy('/Applications');
+    const userApplicationsChildren = await userApplications.listChildrenRecursively(options);
+    const systemApplicationsChildren = await systemApplications.listChildrenRecursively(options);
+    return [...userApplicationsChildren, ...systemApplicationsChildren];
+  }
+
+  assert(parentDir, 'No program files directory provided');
   return await new Pathy(parentDir).listChildrenRecursively(options);
 }
 
