@@ -74,9 +74,9 @@ jobs:
         run: pnpm turbo run build --only --filter=bscotch-stitch-vscode...
 
       # Run full tests
-      - name: Test
-        #continue-on-error: true
-        run: pnpm turbo run test:auto -- --continue=true
+      - name: test
+        # Site and gcdata are not in the scope of this workflow
+        run: pnpm turbo run test:auto --filter=\!@bscotch/gcdata... --filter=\!@bscotch/stitch-site...  -- --continue=true
       
       # Report
       - name: Test Report
