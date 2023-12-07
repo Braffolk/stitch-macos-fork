@@ -12,7 +12,7 @@ defaults:
     shell: bash
 
 jobs:
-  publish:
+  test:
     runs-on: macos-latest
     steps:
       # SETUP
@@ -25,7 +25,7 @@ jobs:
 
       # Remove any existing pnpm-lock.yaml files, which are
       # both platform-specific and will likely halt the build.
-      - run: rm -f $(pwd)/**/pnpm-lock.yaml
+      - run: find $(pwd) -name pnpm-lock.yaml -delete
 
       - run: corepack enable
       - run: pnpm install --filter=bscotch-stitch-vscode... --filter=stitch-monorepo
