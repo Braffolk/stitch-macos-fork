@@ -30,6 +30,7 @@ jobs:
         with:
           version: 8
           run_install: false
+      - run: pnpm config set pnpm-prefix ~/.pnpm-global
 
       - name: Get pnpm store directory
         shell: bash
@@ -49,14 +50,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
 
-      
-
-      #- run: curl https://sh.rustup.rs -sSf | sh -s -- -y
-
-
-
       - run: corepack enable
       - run: pnpm install --filter=bscotch-stitch-vscode... --filter=stitch-monorepo
+
+
+
 
       # BUILD DEPS
       - name: Build everything
