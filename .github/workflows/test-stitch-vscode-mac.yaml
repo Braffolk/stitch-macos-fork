@@ -42,3 +42,15 @@ jobs:
       # TEST
       - name: Test
         run: pnpm turbo run test:dev --only --filter=bscotch-stitch-vscode...
+
+      # Leave a comment
+      - name: Create commit comment
+        uses: peter-evans/commit-comment@v3
+        with:
+          body: |
+            This is a multi-line test comment
+            - With GitHub **Markdown** :sparkles:
+            - Created by [commit-comment][1]
+
+            [1]: https://github.com/peter-evans/commit-comment
+          reactions: '+1'
