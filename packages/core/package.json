@@ -50,7 +50,7 @@
     "build": "tsc --build",
     "clean": "rimraf build dist *.tsbuildinfo **/*.tsbuildinfo",
     "test": "mocha --config ../../config/.mocharc.cjs --parallel=false --timeout=30000",
-    "test:auto": "pnpm mocha --config ../../config/.mocharc.cjs --reporter json --forbid-only=false --parallel=false --timeout=60000 --exit --bail=false -O output=test-results.json",
+    "test:auto": "pnpm mocha --config ../../config/.mocharc.cjs --reporter json --forbid-only=false --parallel=false --timeout=180000 --exit --bail=false -O output=test-results.json",
     "test:dev": "mocha --config ../../config/.mocharc.cjs --forbid-only=false --parallel=false --timeout=9999999999",
     "build_test": "tsc --build && mocha --config ../../config/.mocharc.cjs --forbid-only=false --parallel=false --timeout=9999999999",
     "watch": "tsc --build --watch"

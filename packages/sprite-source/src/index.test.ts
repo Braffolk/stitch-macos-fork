@@ -190,7 +190,7 @@ describe('Sprite Sources', function () {
   });
 
   it('can quickly update a sprite source', async function () {
-    const source = new SpriteSource("./samples");
+    const source = new SpriteSource('sprite-src');
     const start = startTimer();
     await source.update({ ignore: ['--impl'] });
     endTimer(start, 'Updated sprite source');

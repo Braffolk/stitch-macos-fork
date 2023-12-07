@@ -24,7 +24,6 @@ export async function executeGameMakerRuntimeInstallCommand(
   runtime: GameMakerRuntime,
   newRuntime: { version: string; feedUrl: string },
 ) {
-  console.log("runtimePath", runtime.directory.up().absolute);
   return await executeGameMakerCommand(
     runtime,
     'runtime',

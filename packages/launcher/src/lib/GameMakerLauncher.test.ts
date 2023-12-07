@@ -13,7 +13,7 @@ const sampleProjectCompatibleIde = '2022.600.0.147'; //'2022.500.0.97'; //'2022.
 const sampleProjectCompatibleRuntime = '2022.600.0.121';
 
 const promptWithTimeout = function(
-  promptOptions: QuestionCollection<Answers>, timeout = 5000
+  promptOptions: QuestionCollection<Answers>, timeout = 10000
 ): Promise<Object> {
   return Promise.race([
     inquirer.prompt(promptOptions),

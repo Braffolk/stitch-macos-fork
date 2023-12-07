@@ -144,8 +144,6 @@ export class GameMakerProject extends Project {
       quiet: true,
     });
 
-    logger.info("Command is: " + cmd);
-
     // Create or re-use a terminal
     const name = `GameMaker v${release.runtime.version}`;
     const existing = vscode.window.terminals.find((term) => term.name === name);

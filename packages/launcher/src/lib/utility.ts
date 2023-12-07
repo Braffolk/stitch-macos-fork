@@ -29,7 +29,7 @@ export function createStaticTracer(className: string, methodName: string) {
   return useTracer(`${libName}:${className}:${methodName}`);
 }
 
-export const bootstrapRuntimeVersion = '2022.300.0.478';
+
 
 export const stitchConfigDir = new Pathy(`${os.homedir()}/.stitch`);
 
@@ -41,6 +41,8 @@ export const currentOs =
     : os.platform() === 'linux'
     ? 'linux'
     : undefined;
+
+export const bootstrapRuntimeVersion =  currentOs === "osx" ? '2022.300.0.478' : '2022.300.0.476';
 
 export const currentArchitecture = os.arch();
 
@@ -79,6 +81,9 @@ export async function projectLogDirectory(
   project?: string | Pathy,
   options?: GameMakerLogOptions,
 ) {
+  // Quotes are NOT removed automatically on MacOS. This is a problem,
+  // because the file paths will contain quotes, breaking the path.
+  // TODO: This is a partial fix. There are still quotes running amock out there.
   const stripEmpath = (p?: string | Pathy) => p ? p.toString().replace(/^"|"$/g, '') : p;
 
   const logDir = new Pathy(stripEmpath(
@@ -276,8 +281,8 @@ export async function listInstalledRuntimes(): Promise<
       executablePath,
     });
   }
-  console.log("installed runtimes", runtimes.map(r => r.version));
   if (runtimes.length === 0) {
+    console.log("No installed runtimes");
     console.log("   Looked for runtimes in directories", runtimeDirs.map(d => d.absolute));
   }
   return runtimes;
@@ -368,7 +373,7 @@ export async function listGameMakerDataDirs(): Promise<Pathy[]> {
 }
 
 
-const installedIdesOSOptions = {
+const pathyOsIdeQueryOptions = {
     win32: {
       maxDepth: 1,
       includePatterns: [/^GameMaker(Studio2?)?((-| )(Beta|LTS))?\.exe$/],
@@ -387,7 +392,7 @@ export async function listInstalledIdes(
   assert (process.platform === 'win32' || process.platform === 'darwin', 'Only Windows and mac are supported');
 
   const options =
-      installedIdesOSOptions[process.platform as 'win32' | 'darwin'] as PathyListChildrenOptions;
+      pathyOsIdeQueryOptions[process.platform as 'win32' | 'darwin'] as PathyListChildrenOptions;
 
   // on macOS, look at both ~/Applications and /Applications
   if (process.platform === 'darwin') {

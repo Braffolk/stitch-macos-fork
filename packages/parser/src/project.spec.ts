@@ -15,6 +15,7 @@ const numberSchema = z
   .string()
   .refine((v) => /[\d.-]+/)
   .transform((v) => +v);
+// live_wallpaper_subscription exists on some versions, which breaks this.
 const featureFlagSchema = z.enum(['rollback', 'audio-fx', 'live_wallpaper_subscription']);
 
 const optionalTuple = (types: [ZodTypeAny, ...ZodTypeAny[]]) => {
