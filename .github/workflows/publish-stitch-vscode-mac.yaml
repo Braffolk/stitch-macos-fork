@@ -16,8 +16,6 @@ defaults:
 jobs:
   publish:
     runs-on: macos-latest
-    permissions:
-      contents: write
     steps:
       # SETUP
       - uses: actions/checkout@v3
