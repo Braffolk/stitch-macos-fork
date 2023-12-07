@@ -45,7 +45,7 @@ jobs:
           pnpm build
 
       - name: CreateVSCodePackage
-        run: pnpm vsce package --no-dependencies --githubBranch develop --out bscotch-stitch-vscode-mac.vsix
+        run: vsce package --no-dependencies --githubBranch develop --out bscotch-stitch-vscode-mac.vsix
         env:
           APPDATA: $HOME/.config
           PROGRAMDATA: /Users/Shared/
