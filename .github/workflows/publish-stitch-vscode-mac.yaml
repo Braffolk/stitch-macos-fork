@@ -39,13 +39,13 @@ jobs:
       # Remove any existing pnpm-lock.yaml files, which are
       # both platform-specific and will likely halt the build.
       - name: Remove pnpm-lock.yaml
-        run: find $(pwd) -name pnpm-lock.yaml -delete
+        run: rm -f pnpm-lock.yaml
 
       - uses: actions/cache@v3
         name: Setup pnpm cache
         with:
           path: ${{ env.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/package.json') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
 
