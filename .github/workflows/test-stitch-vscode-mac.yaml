@@ -1,0 +1,44 @@
+name: Test Stitch for VSCode on MacOS
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'bscotch-stitch-vscode@*'
+
+permissions:
+  contents: write
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  publish:
+    runs-on: macos-latest
+    permissions:
+      contents: write
+    steps:
+      # SETUP
+      - uses: actions/checkout@v3
+        with:
+          lfs: true
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18.18.0
+
+      # Remove any existing pnpm-lock.yaml files, which are
+      # both platform-specific and will likely halt the build.
+      - run: find $(pwd) -name pnpm-lock.yaml -delete
+
+      - run: corepack enable
+      - run: pnpm install --filter=bscotch-stitch-vscode... --filter=stitch-monorepo
+      - run: pwd
+
+      # BUILD DEPS
+      - name: Build
+        run: pnpm turbo run build --only --filter=bscotch-stitch-vscode...
+
+      # TEST
+      - name: Test
+        run: pnpm turbo run test:dev --only --filter=bscotch-stitch-vscode...
