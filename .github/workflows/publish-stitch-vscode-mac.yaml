@@ -25,27 +25,29 @@ jobs:
         with:
           node-version: 18.18.0
 
+      - name: Setup
       # Remove any existing pnpm-lock.yaml files, which are
       # both platform-specific and will likely halt the build.
-      - run: find $(pwd) -name pnpm-lock.yaml -delete
+        run: >+
+          find $(pwd) -name pnpm-lock.yaml -delete
+          corepack enable
+          pnpm install --filter=bscotch-stitch-vscode... --filter=stitch-monorepo
+          pwd
 
-      - run: corepack enable
-      - run: pnpm install --filter=bscotch-stitch-vscode... --filter=stitch-monorepo
-      - run: pwd
+
 
       # BUILD DEPS
-      - name: Build
+      - name: Build deps
         run: pnpm turbo run build --only --filter=bscotch-stitch-vscode...
 
-
-      - name: BuildVSCodePackage
+      - name: Build VSCode
         run: |
           cd packages/vscode && \
           pnpm install . && \
           pnpm build && \
-          pnpm install vsce
+          pnpm install @vscode/vsce
 
-      - name: CreateVSCodePackage
+      - name: Create VSCodePackage
         run: pnpm vsce package --no-dependencies --githubBranch develop --out bscotch-stitch-vscode-mac.vsix
         env:
           APPDATA: $HOME/.config
