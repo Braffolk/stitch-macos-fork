@@ -92,7 +92,7 @@ jobs:
           release_name: ${{ github.ref }}
           draft: false
           prerelease: false
-          artifacts: packages/vscode/bscotch-stitch-vscode-mac.vsix
+          artifacts: ./packages/vscode/bscotch-stitch-vscode-mac.vsix
 
           body: |
             This is an auto-generated release for ${{ github.ref }}.
