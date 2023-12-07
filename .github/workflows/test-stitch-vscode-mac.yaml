@@ -69,7 +69,7 @@ jobs:
       - name: Install GMS
         run: |
           curl -L https://gms.yoyogames.com/GameMakerStudio2-2022.300.0.488.pkg -o gms.pkg
-          installer -pkg gms.pkg -target $PROGRAMFILES -y
+          installer -pkg gms.pkg -target $PROGRAMFILES -verbose
 
       # Install dependencies
       - run: corepack enable
