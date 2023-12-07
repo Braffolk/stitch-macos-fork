@@ -38,9 +38,11 @@ jobs:
         run: pnpm turbo run build --only --filter=bscotch-stitch-vscode...
 
 
-
-      - run: cd packages/vscode
-      - run: pnpm install .
+      - name: BuildVSCodePackage
+        run:
+          cd packages/vscode
+          pnpm install .
+          pnpm build
 
       - name: CreateVSCodePackage
         run: pnpm vsce package --no-dependencies --githubBranch develop --out bscotch-stitch-vscode-mac.vsix
