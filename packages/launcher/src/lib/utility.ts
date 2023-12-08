@@ -204,7 +204,7 @@ export async function runIdeInstaller(idePath: Pathy) {
     // Use sudo, as otherwise the installer can seemingly randomly fail,
     // when it tries to write to /Applications
     // Sudo will instead ask for the user's password, which is fine.
-    command = `sudo installer -verbose -pkg "${idePath.absolute}" -target CurrentUserHomeDirectory`;
+    command = `installer -verbose -pkg "${idePath.absolute}" -target CurrentUserHomeDirectory`;
   }
   debug(`Running command: ${command}`);
   const installer = exec(command);
