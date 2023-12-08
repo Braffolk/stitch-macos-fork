@@ -58,10 +58,6 @@ jobs:
           echo "IDEVERSION=2022.300.0.488" >> $GITHUB_ENV
           echo "RUNTIMEVERSION=2022.300.0.478" >> $GITHUB_ENV
 
-          mkdir -p $APPDATA
-          mkdir -p $PROGRAMFILES
-          mkdir -p $PROGRAMDATA
-
 
       # Install GMS
       - name: Install GMS
