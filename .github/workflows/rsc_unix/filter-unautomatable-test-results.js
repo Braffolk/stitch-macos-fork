@@ -1,14 +1,14 @@
-const fs = require('fs');
+import { readdirSync, existsSync, readFile, writeFile } from 'fs';
 
 // process all paths matching: ./packages/*/test-results.json
-const testResultsPaths = fs.readdirSync('./packages')
+const testResultsPaths = readdirSync('./packages')
     .map(path => `./packages/${path}/test-results.json`)
-    .filter(path => fs.existsSync(path));
+    .filter(path => existsSync(path));
 
 testResultsPaths.forEach(parseTestResults);
 
 function parseTestResults(testResultsPath) {
-    fs.readFile(testResultsPath, 'utf8', (err, data) => {
+    readFile(testResultsPath, 'utf8', (err, data) => {
         if (err) {
             console.error('Error reading the test results file:', err);
             return;
@@ -23,7 +23,7 @@ function parseTestResults(testResultsPath) {
                 return !test.err || !test.err.message.includes('No user is logged in');
             });
 
-            fs.writeFile(testResultsPath, JSON.stringify(results, null, 2), 'utf8', writeErr => {
+            writeFile(testResultsPath, JSON.stringify(results, null, 2), 'utf8', writeErr => {
                 if (writeErr) {
                     console.error('Error writing the processed test results:', writeErr);
                 } else {
