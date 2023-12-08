@@ -210,6 +210,9 @@ export async function runIdeInstaller(idePath: Pathy) {
   debug(`Running command: ${command}`);
   const installer = exec(command);
   installer.stdout?.on('data', (data) => {
+    if (data.includes('The upgrade failed')) {
+      ok(false, data);
+    }
     console.log(data);
   });
   return await new Promise((resolve, reject) => {
