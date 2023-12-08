@@ -73,7 +73,7 @@ jobs:
       - name: Install runtime
         run: |
           PATH_RUNTIME="${PROGRAMDATA}GameMakerStudio2-Beta/Cache/runtimes/runtime-$RUNTIMEVERSION"
-          PATH_IGOR_ENTRY="./.github/workflows/mac/igor-2022.200.0.452/Igor.exe"
+          PATH_IGOR_ENTRY="./.github/workflows/rsc_unix/igor-2022.200.0.452/Igor.exe"
           
           "/Library/Frameworks/Mono.framework/Versions/Current/Commands/mono" "$PATH_IGOR_ENTRY" \
             -user=$APPDATA/.config/GameMakerStudio2-Beta/... \
@@ -115,7 +115,7 @@ jobs:
 
       # Remove unautomatable tests
       - name: Process Test Results
-        run: node ./.github/workflows/mac/filter-unautomatable-test-results.js
+        run: node ./.github/workflows/rsc_unix/filter-unautomatable-test-results.js
 
       # Report
       - name: Test Report
