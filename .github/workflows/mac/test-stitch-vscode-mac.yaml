@@ -58,8 +58,6 @@ jobs:
           echo "IDEVERSION=2022.300.0.488" >> $GITHUB_ENV
           echo "RUNTIMEVERSION=2022.300.0.478" >> $GITHUB_ENV
 
-      - name: Make dirs if they don't exist
-        run: |
           mkdir -p $APPDATA
           mkdir -p $PROGRAMFILES
           mkdir -p $PROGRAMDATA
@@ -70,30 +68,12 @@ jobs:
         run: |
           curl -L https://gms.yoyogames.com/GameMakerStudio2-$IDEVERSION.pkg -o gms.pkg
           sudo installer -pkg gms.pkg -target /Applications -verbose
-      
-      # Debug - list files in /Applications
-      - name: List files in /
-        run: ls -la /
-      
-      # Debug - list files in $PROGRAMFILES
-      - name: List files in /Applications/
-        run: ls -la /Applications/
-      
-      # Debug - list files in /Users/$USER/Applications
-      - name: List files in /Users/$USER/Applications
-        run: |
-          if [ -d "/Users/$USER/Applications" ]; then
-            ls -la /Users/$USER/Applications
-          else
-            echo "Directory /Users/$USER/Applications does not exist."
-          fi
-          
 
       # Install GMS runtime
       - name: Install runtime
         run: |
           PATH_RUNTIME="${PROGRAMDATA}GameMakerStudio2-Beta/Cache/runtimes/runtime-$RUNTIMEVERSION"
-          PATH_IGOR_ENTRY="./.github/workflows/igor-2022.200.0.452/Igor.exe"
+          PATH_IGOR_ENTRY="./.github/workflows/mac/igor-2022.200.0.452/Igor.exe"
           
           "/Library/Frameworks/Mono.framework/Versions/Current/Commands/mono" "$PATH_IGOR_ENTRY" \
             -user=$APPDATA/.config/GameMakerStudio2-Beta/... \
@@ -101,10 +81,10 @@ jobs:
             --runtimeUrl=https://gms.yoyogames.com/Zeus-Runtime-NuBeta.rss \
             --verbose -- runtime Install $RUNTIMEVERSION
 
-
-      - name: Confirm runtime
+      # Confirm GMS installation
+      - name: Confirm runtime installation
         run: |
-          sleep 5
+          sleep 2
           if [ ! -d "${PROGRAMDATA}GameMakerStudio2-Beta" ]; then
             echo "Directory ${PROGRAMDATA}GameMakerStudio2-Beta does not exist."
             exit 1
@@ -119,7 +99,6 @@ jobs:
       # Install dependencies
       - run: corepack enable
       - run: pnpm install --filter=bscotch-stitch-vscode...
-      - run: pwd
 
       # Build depdenencies
       - name: Build
@@ -133,6 +112,10 @@ jobs:
           APPDATA: ${{ env.APPDATA }}
           PROGRAMFILES: ${{ env.PROGRAMFILES }}
           PROGRAMDATA: ${{ env.PROGRAMDATA }}
+
+      # Remove unautomatable tests
+      - name: Process Test Results
+        run: node ./.github/workflows/mac/filter-unautomatable-test-results.js
 
       # Report
       - name: Test Report
