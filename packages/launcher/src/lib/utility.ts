@@ -201,11 +201,10 @@ export async function runIdeInstaller(idePath: Pathy) {
   if (process.platform === 'win32') {
     command = `start /wait "" "${idePath.absolute}" /S`;
   } else if (process.platform === 'darwin') {
-    // Potentially risky, because the installer waits
-    // for every other installer to finish before execution.
-    // Also overwrites existing installation from same channel
-    // Can be fixed by changing -target
-    command = `installer -verbose -pkg "${idePath.absolute}" -target CurrentUserHomeDirectory`;
+    // Use sudo, as otherwise the installer can seemingly randomly fail,
+    // when it tries to write to /Applications
+    // Sudo will instead ask for the user's password, which is fine.
+    command = `sudo installer -verbose -pkg "${idePath.absolute}" -target CurrentUserHomeDirectory`;
   }
   debug(`Running command: ${command}`);
   const installer = exec(command);
