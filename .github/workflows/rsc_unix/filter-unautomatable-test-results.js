@@ -22,7 +22,9 @@ function parseTestResults(testResultsPath) {
             results.tests = results.tests.filter(test => {
                 // Keep the test if it's not a failure
                 // or if the failure is not for an invalid reason
-                return !test.err || !test.err.message.includes('No user is logged in');
+                return !test.err 
+                    || Object.keys(test.err).length === 0
+                    || !test.err.message?.includes('No user is logged in');
             });
 
             writeFile(testResultsPath, JSON.stringify(results, null, 2), 'utf8', writeErr => {
