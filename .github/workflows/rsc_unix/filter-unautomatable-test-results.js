@@ -5,6 +5,8 @@ const testResultsPaths = readdirSync('./packages')
     .map(path => `./packages/${path}/test-results.json`)
     .filter(path => existsSync(path));
 
+console.log('Processing test results for the following paths:', testResultsPaths);
+
 testResultsPaths.forEach(parseTestResults);
 
 function parseTestResults(testResultsPath) {
